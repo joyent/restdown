@@ -1,41 +1,60 @@
 <!DOCTYPE html>
-<html lang="en"> 
-<head> 
-    <title>Joyent API</title> 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-    <link rel="stylesheet" type="text/css" href="restdown.css"> 
+<html lang="en">
+<head>
+    <title>Joyent API</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="restdown.css">
 </head>
-<body> 
-    <div id="header"> 
+<body>
+    <div id="header">
         <h1>Joyent API Documentation</h1>
-    </div> 
-    <div id="sidebar"> 
-        <div class="vertical_divider"></div> 
-        <ul id="categories"> 
-          <li class="category"> 
-            <h1 class="welcome current"><a href="/">Welcome</a></h1> 
-          </li> 
-          <li class="category"> 
-            <ul> 
-                <li><span class="verb">GET</span><a href="/#GET-/account">/account</a></li> 
-                <li><span class="verb">PUT</span><a href="/#PUT-/account">/account</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/account">/account</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys">/sshkeys</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/sshkeys">/sshkeys</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys/:id">/sshkeys/:id</a></li> 
-                <li><span class="verb">PUT</span><a href="/#PUT-/sshkeys/:id">/sshkeys/:id</a></li> 
-                <li><span class="verb">DEL</span><a href="/#DELETE-/sshkeys/:id">/sshkeys/:id</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node">/smartmachines/node</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/smartmachines/node">/smartmachines/node</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id">/smartmachines/node/:id</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/progress">/smartmachines/node/:id/progress</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/status">/smartmachines/node/:id/status</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/coupons">/coupons</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/♥">/♥</a></li> 
-            </ul> 
-          </li> 
-        </ul> 
-    </div> 
+    </div>
+    <div id="sidebar">
+        <div class="vertical_divider"></div>
+        <ul id="categories">
+          <li class="category">
+            <h1 class="welcome current"><a href="/">Welcome</a></h1>
+          </li>
+          <li class="category">
+            <ul>
+                <li><span class="verb">GET</span><a href="/#GET-/account">/account</a></li>
+                <li><span class="verb">PUT</span><a href="/#PUT-/account">/account</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/account">/account</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/sshkeys">/sshkeys</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/sshkeys">/sshkeys</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/sshkeys/:id">/sshkeys/:id</a></li>
+                <li><span class="verb">PUT</span><a href="/#PUT-/sshkeys/:id">/sshkeys/:id</a></li>
+                <li><span class="verb">DEL</span><a href="/#DELETE-/sshkeys/:id">/sshkeys/:id</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node">/smartmachines/node</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/smartmachines/node">/smartmachines/node</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id">/smartmachines/node/:id</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/progress">/smartmachines/node/:id/progress</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/status">/smartmachines/node/:id/status</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/coupons">/coupons</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/♥">/♥</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <ul>
+  <li><a href="#joyent-api">Joyent API</a>
+  <ul>
+    <li><a href="#all-api-calls-start-with">All API calls start with</a></li>
+    <li><a href="#path">Path</a></li>
+    <li><a href="#format">Format</a></li>
+    <li><a href="#status-codes">Status Codes</a></li>
+  </ul></li>
+  <li><a href="#account">Account</a>
+  <ul>
+    <li><a href="#get-account"><em>GET /account</em></a>
+    <ul>
+      <li><a href="#example-request">example request</a></li>
+      <li><a href="#response">response</a></li>
+    </ul></li>
+  </ul></li>
+</ul>
+
+    </div>
     <div id="content">
 <h1 id="joyent-api">Joyent API</h1>
 

@@ -53,48 +53,54 @@ def restdown(metadata, markdown):
     # - <pre class="req">  How? Hack it?
     sys.path.insert(0, expanduser("~/tm/python-markdown2/lib"))
     import markdown2
+
+    html = markdown2.markdown(markdown, **opts)
+    metadata["toc_html"] = html.toc_html
+
     bits = []
     bits.append(u"""<!DOCTYPE html>
-<html lang="en"> 
-<head> 
-    <title>%(title)s</title> 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
-    <link rel="stylesheet" type="text/css" href="restdown.css"> 
+<html lang="en">
+<head>
+    <title>%(title)s</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="restdown.css">
 </head>
-<body> 
-    <div id="header"> 
+<body>
+    <div id="header">
         <h1>%(title)s Documentation</h1>
-    </div> 
-    <div id="sidebar"> 
-        <div class="vertical_divider"></div> 
-        <ul id="categories"> 
-          <li class="category"> 
-            <h1 class="welcome current"><a href="/">Welcome</a></h1> 
-          </li> 
-          <li class="category"> 
-            <ul> 
-                <li><span class="verb">GET</span><a href="/#GET-/account">/account</a></li> 
-                <li><span class="verb">PUT</span><a href="/#PUT-/account">/account</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/account">/account</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys">/sshkeys</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/sshkeys">/sshkeys</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys/:id">/sshkeys/:id</a></li> 
-                <li><span class="verb">PUT</span><a href="/#PUT-/sshkeys/:id">/sshkeys/:id</a></li> 
-                <li><span class="verb">DEL</span><a href="/#DELETE-/sshkeys/:id">/sshkeys/:id</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node">/smartmachines/node</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/smartmachines/node">/smartmachines/node</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id">/smartmachines/node/:id</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/progress">/smartmachines/node/:id/progress</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/status">/smartmachines/node/:id/status</a></li> 
-                <li><span class="verb">GET</span><a href="/#GET-/coupons">/coupons</a></li> 
-                <li><span class="verb">POST</span><a href="/#POST-/♥">/♥</a></li> 
-            </ul> 
-          </li> 
-        </ul> 
-    </div> 
+    </div>
+    <div id="sidebar">
+        <div class="vertical_divider"></div>
+        <ul id="categories">
+          <li class="category">
+            <h1 class="welcome current"><a href="/">Welcome</a></h1>
+          </li>
+          <li class="category">
+            <ul>
+                <li><span class="verb">GET</span><a href="/#GET-/account">/account</a></li>
+                <li><span class="verb">PUT</span><a href="/#PUT-/account">/account</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/account">/account</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/sshkeys">/sshkeys</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/sshkeys">/sshkeys</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/sshkeys/:id">/sshkeys/:id</a></li>
+                <li><span class="verb">PUT</span><a href="/#PUT-/sshkeys/:id">/sshkeys/:id</a></li>
+                <li><span class="verb">DEL</span><a href="/#DELETE-/sshkeys/:id">/sshkeys/:id</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node">/smartmachines/node</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/smartmachines/node">/smartmachines/node</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id">/smartmachines/node/:id</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/progress">/smartmachines/node/:id/progress</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/status">/smartmachines/node/:id/status</a></li>
+                <li><span class="verb">GET</span><a href="/#GET-/coupons">/coupons</a></li>
+                <li><span class="verb">POST</span><a href="/#POST-/♥">/♥</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        %(toc_html)s
+    </div>
     <div id="content">
 """ % metadata)
-    bits.append(markdown2.markdown(markdown, **opts))
+    bits.append(html)
     bits.append(u"""
     </div>
 </body>
