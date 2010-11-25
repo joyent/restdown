@@ -1,69 +1,13 @@
-# -*- coding: utf-8 -*-
-
-import re
-import time
-import sys
-import codecs
-from os.path import expanduser, basename, splitext
-
-from mklib.common import MkError
-from mklib import Task, mk
-from mklib import sh
-
-
-class render(Task):
-    """render no.de.markdown"""
-    default = True
-    def make(self):
-        path = "examples/no.de.markdown"
-        markdown = codecs.open(path, 'r', 'utf-8').read()
-        metadata = {}
-        if markdown.startswith("---"):
-            _, metastr, markdown = re.compile(r"^---[ \t]*$", re.M).split(
-                markdown, 2)
-            for line in metastr.strip().splitlines(False):
-                line = line.strip()
-                if not line:
-                    continue
-                k, v = line.split(':', 1)
-                metadata[k.strip()] = v.strip()
-        if "title" not in metadata:
-            metadata["title"] = splitext(basename(path))[0] + " API"
-        html = restdown(metadata, markdown)
-        codecs.open("foo.html", "w", "utf-8").write(html)
-        self.log.info("wrote 'foo.html'")
-
-opts = {
-    "extras": {
-        "toc": True,
-        "markdown-in-html": True,
-    }
-}
-
-def restdown(metadata, markdown):
-    #TODO: START HERE
-    # - "endpoint" styling
-    # - "endpoint" JS. Does the new markup and lack of "enpoint fixed" work?
-    # - header-ids extra:
-    #   - add *which* header level to the "header_id_from_text" callback
-    #   - allow that callback to return None to not have an id (empty str
-    #     already works for that?)
-    #   - override that here to only put header ids for h1, h2
-    # - toc
-    # - <pre class="req">  How? Hack it?
-    sys.path.insert(0, expanduser("~/tm/python-markdown2/lib"))
-    import markdown2
-    bits = []
-    bits.append(u"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en"> 
 <head> 
-    <title>%(title)s</title> 
+    <title>Joyent API</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
     <link rel="stylesheet" type="text/css" href="restdown.css"> 
 </head>
 <body> 
     <div id="header"> 
-        <h1>%(title)s Documentation</h1>
+        <h1>Joyent API Documentation</h1>
     </div> 
     <div id="sidebar"> 
         <div class="vertical_divider"></div> 
@@ -93,10 +37,59 @@ def restdown(metadata, markdown):
         </ul> 
     </div> 
     <div id="content">
-""" % metadata)
-    bits.append(markdown2.markdown(markdown, **opts))
-    bits.append(u"""
+<h1 id="joyent-api">Joyent API</h1>
+
+<div class="basic_info"> 
+
+<h4 id="all-api-calls-start-with">All API calls start with</h4>
+
+<pre class="base important">
+https://api.no.de
+</pre>
+
+<h4 id="path">Path</h4>
+
+<p>For this documentation, we will assume every request begins with the above path.</p>
+
+<h4 id="format">Format</h4>
+
+<p>All calls are returned in <strong>JSON</strong>.</p>
+
+<h4 id="status-codes">Status Codes</h4>
+
+<ul>
+<li><strong>200</strong> Successful GET and PUT.</li>
+<li><strong>201</strong> Successful POST.</li>
+<li><strong>202</strong> Successful Provision queued.</li>
+<li><strong>204</strong> Successful DELETE</li>
+<li><strong>401</strong> Unauthenticated.</li>
+<li><strong>409</strong> Unsuccessful POST, PUT, or DELETE (Will return an errors object)</li>
+</ul>
+
+</div>
+
+<h1 id="account">Account</h1>
+
+<h2 id="get-account"><em>GET /account</em></h2>
+
+<p>Expects basic auth to get an existing customer. API will return <strong>200</strong>.</p>
+
+<h5 id="example-request">example request</h5>
+
+<pre><code>$ curl -k -u jill:secret https://api.no.de/account
+</code></pre>
+
+<h5 id="response">response</h5>
+
+<pre><code>{ 
+  "username": "jill", 
+  "first_name": "Jill", 
+  "last_name": "Doe", 
+  "company": "Joyent",
+  "email": "jill@joyent.com"
+}
+</code></pre>
+
     </div>
 </body>
-</html>""")
-    return u''.join(bits)
+</html>
