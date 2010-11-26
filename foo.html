@@ -68,7 +68,7 @@ https://api.no.de
 
 <h1 id="account">Account</h1>
 
-<h2 id="GET-/account"><span>GET /account</span></h2>
+<h2 class="endpoint" id="GET-/account"><span>GET /account</span></h2>
 
 <p>Expects basic auth to get an existing customer. API will return <strong>200</strong>.</p>
 
@@ -88,7 +88,7 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 id="PUT-/account"><span>PUT /account</span></h2>
+<h2 class="endpoint" id="PUT-/account"><span>PUT /account</span></h2>
 
 <p>Update your account. Pass in any number of values. Possible responses include
 <code>200</code>, or <code>409</code>.</p>
@@ -111,7 +111,7 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 id="POST-/account"><span>POST /account</span></h2>
+<h2 class="endpoint" id="POST-/account"><span>POST /account</span></h2>
 
 <p>Creates new account. Required fields are username, email password, and password_confirmation. Possible responses include 201 or 409</p>
 
@@ -138,7 +138,7 @@ https://api.no.de
 
 <h1 id="ssh-keys">SSH Keys</h1>
 
-<h2 id="GET-/sshkeys"><span>GET /sshkeys</span></h2>
+<h2 class="endpoint" id="GET-/sshkeys"><span>GET /sshkeys</span></h2>
 
 <p>Returns collection of public keys. Response will be 200</p>
 
@@ -164,7 +164,7 @@ https://api.no.de
 ]
 </code></pre>
 
-<h2 id="POST-/sshkeys"><span>POST /sshkeys</span></h2>
+<h2 class="endpoint" id="POST-/sshkeys"><span>POST /sshkeys</span></h2>
 
 <p>Adds a new private key to your account. "key" is a required field and "name" is optional. "key" may be an a string or a file upload. Possible responses include 201 or 409.</p>
 
@@ -191,7 +191,7 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 id="GET-/sshkeys/:id"><span>GET /sshkeys/:id</span></h2>
+<h2 class="endpoint" id="GET-/sshkeys/:id"><span>GET /sshkeys/:id</span></h2>
 
 <p>Returns single resource with a public key. Possible responses 200, or 404</p>
 
@@ -209,7 +209,7 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 id="PUT-/sshkeys/:id"><span>PUT /sshkeys/:id</span></h2>
+<h2 class="endpoint" id="PUT-/sshkeys/:id"><span>PUT /sshkeys/:id</span></h2>
 
 <p>Updates public key record. Possible responses include 200, or 409</p>
 
@@ -228,7 +228,7 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 id="DELETE-/sshkeys/:id"><span>DELETE /sshkeys/:id</span></h2>
+<h2 class="endpoint" id="DELETE-/sshkeys/:id"><span>DELETE /sshkeys/:id</span></h2>
 
 <p>Deletes public keys. Api will respond with status 204</p>
 
@@ -239,7 +239,7 @@ https://api.no.de
 
 <h1 id="node-service">Node Service</h1>
 
-<h2 id="GET-/smartmachines/node"><span>GET /smartmachines/node</span></h2>
+<h2 class="endpoint" id="GET-/smartmachines/node"><span>GET /smartmachines/node</span></h2>
 
 <p>Gets all Node SmartMachines. Api will respond with status 200</p>
 
@@ -267,7 +267,7 @@ https://api.no.de
 ]
 </code></pre>
 
-<h2 id="POST-/smartmachines/node"><span>POST /smartmachines/node</span></h2>
+<h2 class="endpoint" id="POST-/smartmachines/node"><span>POST /smartmachines/node</span></h2>
 
 <p>Creates Node SmartMachine. Api will respond with status 202, or 409</p>
 
@@ -306,31 +306,28 @@ $(function() {
         }
     }
 
-    $("h2").each(function(i) {
+    $("h2.endpoint").each(function(i) {
         offsets.push($(this).offset().top - headerHeight)
     });
-    console.log(offsets);
 
-    // var anchor = self.document.location.hash;
-    //
-    // if(anchor != ""){
-    //   $('h2').each(function(i){
-    //     if("#" + this.innerHTML == anchor){
-    //       this.scrollIntoView();
-    //     }
-    //   })
-    // }
+    $("#content").append('<h2 class="endpoint fixed" style="display: none"><span>&nbsp;</span></h2>');
+    var fixed_h2 = $("h2.fixed");
+    var fixed_span = $("h2.fixed span");
+
     $("#content").scroll(function() {
         var scrollDistance = $("#content").attr('scrollTop');
         var now = endpoint(scrollDistance);
 
         if (now !== current) {
-            console.log("scroll: scrollDistance="+scrollDistance+" now="+now);
             $("#sidebar li").removeClass("current");
             current = now;
-            if (current >= 0) {
-                var heading = $($("h2 span")[current]).text();
+            if (current < 0) {
+                fixed_h2.hide();
+            } else if (current >= 0) {
+                var heading = $($("h2.endpoint span")[current]).text();
                 $("#sidebar a[href|=#" + heading.replace(' ', '-') + "]").parent().addClass("current");
+                fixed_span.text(heading);
+                fixed_h2.show();
             }
         }
     });

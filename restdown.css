@@ -238,20 +238,21 @@ pre.endpoint{
   padding-left:20px;
 }
 
-h2 {
+h2.endpoint {
   overflow:auto;
-  border-top:2px solid #979592 !important;
+  border-top:2px solid #979592;
   z-index:3;
 }
 
-div.endpoint.fixed{
+h2.endpoint.fixed {
   position:fixed;
+  margin-top: 0;
   border-top:none;
   right:45px;
   top:66px;
 }
 
-h2 span {
+h2.endpoint span {
   background: #979592;
   float:right;
   color:#fff;

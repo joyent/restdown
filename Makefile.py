@@ -56,13 +56,13 @@ class Markdown(markdown2.Markdown):
             return text.replace(' ', '-')
 
     _endpoint_header_re = re.compile(
-        r'''^(<h2 id=".*?">)([A-Z]+\s+.*?)(</h2>)$''', re.M)
+        r'''^(<h2)( id=".*?"*>)([A-Z]+\s+.*?)(</h2>)$''', re.M)
     _pre_command_block_re = re.compile(r'<pre><code>\$ (.*?)</code></pre>', re.S)
     def postprocess(self, text):
         # Add markup to endpoint h2's for styling.
         text = self._endpoint_header_re.sub(
-            r'\1<span>\2</span>\3', text)
-        # Add "req" class and sexify pre-blocks starting with '$'.
+            r'\1 class="endpoint"\2<span>\3</span>\4', text)
+        # Identify shell pre-blocks for styling.
         text = self._pre_command_block_re.sub(
             r'<pre class="shell"><code class="prompt">\1</code></pre>', text)
         return text
@@ -83,8 +83,8 @@ def restdown(metadata, markdown):
     html = Markdown(**opts).convert(markdown)
     metadata["toc_html"] = html.toc_html
 
-    print html.toc_html
-    print html._toc
+    #print html.toc_html
+    #print html._toc
 
     bits = []
     bits.append(u"""<!DOCTYPE html>
@@ -126,9 +126,13 @@ $(function() {
         }
     }
 
-    $("h2").each(function(i) {
+    $("h2.endpoint").each(function(i) {
         offsets.push($(this).offset().top - headerHeight)
     });
+
+    $("#content").append('<h2 class="endpoint fixed" style="display: none"><span>&nbsp;</span></h2>');
+    var fixed_h2 = $("h2.fixed");
+    var fixed_span = $("h2.fixed span");
 
     $("#content").scroll(function() {
         var scrollDistance = $("#content").attr('scrollTop');
@@ -137,9 +141,13 @@ $(function() {
         if (now !== current) {
             $("#sidebar li").removeClass("current");
             current = now;
-            if (current >= 0) {
-                var heading = $($("h2 span")[current]).text();
+            if (current < 0) {
+                fixed_h2.hide();
+            } else if (current >= 0) {
+                var heading = $($("h2.endpoint span")[current]).text();
                 $("#sidebar a[href|=#" + heading.replace(' ', '-') + "]").parent().addClass("current");
+                fixed_span.text(heading);
+                fixed_h2.show();
             }
         }
     });
