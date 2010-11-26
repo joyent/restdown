@@ -194,7 +194,7 @@ pre.endpoint{
   background:#e1eaef;
 }
 
-li.category li.current, h1.welcome.current {
+#sidebar li.current {
   background-image:url(tab.gif);
   background-repeat: no-repeat;
   background-position:right;

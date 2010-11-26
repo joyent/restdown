@@ -45,12 +45,15 @@ opts = {
 
 
 class Markdown(markdown2.Markdown):
-    _seen_first_h1 = False
+    _skipped_first_h1 = False
     def header_id_from_text(self, text, prefix, n):
-        if n == 1 and not self._seen_first_h1:
-            self._seen_first_h1 = True
-        elif n in (1, 2):
+        if n == 1 and not self._skipped_first_h1:
+            self._skipped_first_h1 = True
+        elif n == 1:
             return super(Markdown, self).header_id_from_text(text, prefix, n)
+        elif n == 2:
+            # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
+            return text.replace(' ', '-')
 
     _endpoint_header_re = re.compile(
         r'''^(<h2 id=".*?">)([A-Z]+\s+.*?)(</h2>)$''', re.M)
@@ -90,6 +93,7 @@ def restdown(metadata, markdown):
     <title>%(title)s</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="restdown.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 </head>
 <body>
     <div id="header">
@@ -103,6 +107,45 @@ def restdown(metadata, markdown):
     bits.append(html)
     bits.append(u"""
     </div>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+    var headerHeight = $("#header").height();
+    var offsets = [];
+    var current = -1;
+
+    function endpoint(scrollDistance) {
+        if (scrollDistance < offsets[0]) {
+            return -1;
+        } else {
+            for (var id = offsets.length; id > 0; id--) {
+                if (scrollDistance > offsets[id - 1]) {
+                    return id - 1;
+                    break;
+                }
+            }
+        }
+    }
+
+    $("h2").each(function(i) {
+        offsets.push($(this).offset().top - headerHeight)
+    });
+
+    $("#content").scroll(function() {
+        var scrollDistance = $("#content").attr('scrollTop');
+        var now = endpoint(scrollDistance);
+
+        if (now !== current) {
+            $("#sidebar li").removeClass("current");
+            current = now;
+            if (current >= 0) {
+                var heading = $($("h2 span")[current]).text();
+                $("#sidebar a[href|=#" + heading.replace(' ', '-') + "]").parent().addClass("current");
+            }
+        }
+    });
+});
+
+</script>
 </body>
 </html>""")
     return u''.join(bits)
