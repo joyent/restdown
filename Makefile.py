@@ -4,7 +4,8 @@ import re
 import time
 import sys
 import codecs
-from os.path import expanduser, basename, splitext
+from os.path import expanduser, basename, splitext, dirname, join
+from glob import glob
 
 from mklib.common import MkError
 from mklib import Task, mk
@@ -14,27 +15,12 @@ sys.path.insert(0, expanduser("~/tm/python-markdown2/lib"))
 import markdown2
 
 
-class render(Task):
-    """render no.de.markdown"""
+class examples(Task):
+    """render examples/*.restdown"""
     default = True
     def make(self):
-        path = "examples/no.de.markdown"
-        markdown = codecs.open(path, 'r', 'utf-8').read()
-        metadata = {}
-        if markdown.startswith("---"):
-            _, metastr, markdown = re.compile(r"^---[ \t]*$", re.M).split(
-                markdown, 2)
-            for line in metastr.strip().splitlines(False):
-                line = line.strip()
-                if not line:
-                    continue
-                k, v = line.split(':', 1)
-                metadata[k.strip()] = v.strip()
-        if "title" not in metadata:
-            metadata["title"] = splitext(basename(path))[0] + " API"
-        html = restdown(metadata, markdown)
-        codecs.open("foo.html", "w", "utf-8").write(html)
-        self.log.info("wrote 'foo.html'")
+        for path in glob(join(self.dir, "examples", "*.restdown")):
+            restdown_path(path)
 
 opts = {
     "extras": {
@@ -44,13 +30,13 @@ opts = {
 }
 
 
-class Markdown(markdown2.Markdown):
+class Restdowner(markdown2.Markdown):
     _skipped_first_h1 = False
     def header_id_from_text(self, text, prefix, n):
         if n == 1 and not self._skipped_first_h1:
             self._skipped_first_h1 = True
         elif n == 1:
-            return super(Markdown, self).header_id_from_text(text, prefix, n)
+            return super(Restdowner, self).header_id_from_text(text, prefix, n)
         elif n == 2:
             # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
             return text.replace(' ', '-')
@@ -72,15 +58,44 @@ class Markdown(markdown2.Markdown):
         if level == 2:
             name = self._endpoint_re.sub(
                 r'<span class="verb">\1</span>\2<span>\3</span>', name)
-        super(Markdown, self)._toc_add_entry(level, id, name)
+        super(Restdowner, self)._toc_add_entry(level, id, name)
+
+def restdown_path(path):
+    markdown = codecs.open(path, 'r', 'utf-8').read()
+    metadata = {}
+    if markdown.startswith("---"):
+        _, metastr, markdown = re.compile(r"^---[ \t]*$", re.M).split(
+            markdown, 2)
+        for line in metastr.strip().splitlines(False):
+            line = line.strip()
+            if not line:
+                continue
+            k, v = line.split(':', 1)
+            metadata[k.strip()] = v.strip()
+    if "title" not in metadata:
+        title = ' '.join(s.capitalize()
+            for s in splitext(basename(path))[0].split('-'))
+        metadata["title"] = title
+    html = restdown(metadata, markdown)
+
+    base, ext = splitext(basename(path))
+    output_path = join(dirname(path), base + ".html")
+    codecs.open(output_path, "w", "utf-8").write(html)
+    print("wrote '%s'" % output_path)
+
+
 
 
 def restdown(metadata, markdown):
-    #TODO: START HERE
-    # - "endpoint" JS. Does the new markup and lack of "enpoint fixed" work?
-    # - fill in content
+    """Convert the given metadata and markdown content to restdown HTML.
 
-    html = Markdown(**opts).convert(markdown)
+    @param metadata {dict} Relevant metadata keys are:
+            "title"    the HTML document title
+        TODO: add more of these for parameterizing things like branding images
+    @param markdown {str} The markdown content to convert
+    @returns {str} The HTML document (full page)
+    """
+    html = Restdowner(**opts).convert(markdown)
     metadata["toc_html"] = html.toc_html
 
     #print html.toc_html
