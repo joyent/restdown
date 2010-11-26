@@ -10,36 +10,25 @@
         <h1>Joyent API Documentation</h1>
     </div>
     <div id="sidebar">
-        <div class="vertical_divider"></div>
-        <ul id="categories">
-          <li class="category">
-            <h1 class="welcome current"><a href="/">Welcome</a></h1>
-          </li>
-          <li class="category">
-            <ul>
-                <li><span class="verb">GET</span><a href="/#GET-/account">/account</a></li>
-                <li><span class="verb">PUT</span><a href="/#PUT-/account">/account</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/account">/account</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys">/sshkeys</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/sshkeys">/sshkeys</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys/:id">/sshkeys/:id</a></li>
-                <li><span class="verb">PUT</span><a href="/#PUT-/sshkeys/:id">/sshkeys/:id</a></li>
-                <li><span class="verb">DEL</span><a href="/#DELETE-/sshkeys/:id">/sshkeys/:id</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node">/smartmachines/node</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/smartmachines/node">/smartmachines/node</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id">/smartmachines/node/:id</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/progress">/smartmachines/node/:id/progress</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/status">/smartmachines/node/:id/status</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/coupons">/coupons</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/♥">/♥</a></li>
-            </ul>
-          </li>
-        </ul>
-
-        <ul>
+<ul>
   <li><a href="#account">Account</a>
   <ul>
     <li><a href="#get-account"><span class="verb">GET</span> <span>/account</span></a></li>
+    <li><a href="#put-account"><span class="verb">PUT</span> <span>/account</span></a></li>
+    <li><a href="#post-account"><span class="verb">POST</span> <span>/account</span></a></li>
+  </ul></li>
+  <li><a href="#ssh-keys">SSH Keys</a>
+  <ul>
+    <li><a href="#get-sshkeys"><span class="verb">GET</span> <span>/sshkeys</span></a></li>
+    <li><a href="#post-sshkeys"><span class="verb">POST</span> <span>/sshkeys</span></a></li>
+    <li><a href="#get-sshkeysid"><span class="verb">GET</span> <span>/sshkeys/:id</span></a></li>
+    <li><a href="#put-sshkeysid"><span class="verb">PUT</span> <span>/sshkeys/:id</span></a></li>
+    <li><a href="#delete-sshkeysid"><span class="verb">DELETE</span> <span>/sshkeys/:id</span></a></li>
+  </ul></li>
+  <li><a href="#node-service">Node Service</a>
+  <ul>
+    <li><a href="#get-smartmachinesnode"><span class="verb">GET</span> <span>/smartmachines/node</span></a></li>
+    <li><a href="#post-smartmachinesnode"><span class="verb">POST</span> <span>/smartmachines/node</span></a></li>
   </ul></li>
 </ul>
 
@@ -84,8 +73,7 @@ https://api.no.de
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -k -u jill:secret https://api.no.de/account
-</code></pre>
+<pre class="shell"><code class="prompt">curl -k -u jill:secret https://api.no.de/account</code></pre>
 
 <h5>response</h5>
 
@@ -95,6 +83,194 @@ https://api.no.de
   "last_name": "Doe",
   "company": "Joyent",
   "email": "jill@joyent.com"
+}
+</code></pre>
+
+<h2 id="put-account"><span>PUT /account</span></h2>
+
+<p>Update your account. Pass in any number of values. Possible responses include
+<code>200</code>, or <code>409</code>.</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/account -X PUT \
+  -F 'phone=6041234567'</code></pre>
+
+<h5>response</h5>
+
+<pre><code>{
+  "username": "jill",
+  "first_name": "Jill",
+  "last_name": "Doe",
+  "company": "Joyent",
+  "email": "jill@joyent.com",
+  "phone": "6041234567"
+}
+</code></pre>
+
+<h2 id="post-account"><span>POST /account</span></h2>
+
+<p>Creates new account. Required fields are username, email password, and password_confirmation. Possible responses include 201 or 409</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl https://api.no.de/account \
+  -F "email=jill@joyent.com" \
+  -F "username=jill" \
+  -F "password=secret" \
+  -F "password_confirmation=secret"</code></pre>
+
+<h5>response</h5>
+
+<pre><code>{
+  "username": "jill",
+  "first_name": "Jill",
+  "last_name": "Doe",
+  "company": "Joyent",
+  "email": "jill@joyent.com",
+  "phone": null,
+}
+</code></pre>
+
+<h1 id="ssh-keys">SSH Keys</h1>
+
+<h2 id="get-sshkeys"><span>GET /sshkeys</span></h2>
+
+<p>Returns collection of public keys. Response will be 200</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys</code></pre>
+
+<h5>response</h5>
+
+<pre><code>[
+  {
+    "uri": "/sshkeys/37",
+    "name": "laptop",
+    "key": "ssh-rsa AAAAB3NzaC1..."
+  },
+  {
+    "uri": "/sshkeys/42",
+    "name": "home machine",
+    "key": "ssh-rsa AAAdFzzx927..."
+  },
+  ...
+]
+</code></pre>
+
+<h2 id="post-sshkeys"><span>POST /sshkeys</span></h2>
+
+<p>Adds a new private key to your account. "key" is a required field and "name" is optional. "key" may be an a string or a file upload. Possible responses include 201 or 409.</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys \
+  -F "name=laptop" -F "key=&lt;/Users/jill/.ssh/id_rsa.pub"</code></pre>
+
+<p>OR (file upload)</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys \
+  -F "name=laptop" -F "key=@/Users/jill/.ssh/id_rsa.pub"</code></pre>
+
+<h5>response</h5>
+
+<pre><code>{
+  "uri": "/sshkeys/42",
+  "name": "laptop",
+  "key": "ssh-rsa AAAAB3NzaC1..."
+}
+</code></pre>
+
+<h2 id="get-sshkeysid"><span>GET /sshkeys/:id</span></h2>
+
+<p>Returns single resource with a public key. Possible responses 200, or 404</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys/42</code></pre>
+
+<h5>response</h5>
+
+<pre><code>{
+  "uri": "/sshkeys/42",
+  "name": "laptop",
+  "key": "ssh-rsa AAAdFzzx927..."
+}
+</code></pre>
+
+<h2 id="put-sshkeysid"><span>PUT /sshkeys/:id</span></h2>
+
+<p>Updates public key record. Possible responses include 200, or 409</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys/42 -X PUT \
+  -F "name=a better description"</code></pre>
+
+<h5>response</h5>
+
+<pre><code>{
+  "uri": "/sshkeys/42",
+  "name": "a better description",
+  "key": "ssh-rsa AAAdFzzx927..."
+}
+</code></pre>
+
+<h2 id="delete-sshkeysid"><span>DELETE /sshkeys/:id</span></h2>
+
+<p>Deletes public keys. Api will respond with status 204</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys/42 -X DELETE</code></pre>
+
+<h1 id="node-service">Node Service</h1>
+
+<h2 id="get-smartmachinesnode"><span>GET /smartmachines/node</span></h2>
+
+<p>Gets all Node SmartMachines. Api will respond with status 200</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/smartmachines/node</code></pre>
+
+<h5>response</h5>
+
+<pre><code>[
+  {
+    "uri": "/smartmachines/node/9",
+    "ip": "8.19.35.172",
+    "hostname": "wicked.no.de",
+    "repo": "ssh://node@wicked.no.de/home/node/repo"
+  },
+  {
+    "uri": "/smartmachines/node/42",
+    "ip": "8.19.35.173",
+    "hostname": "jillblog.no.de",
+    "repo": "ssh://node@jillblog.no.de/home/node/repo"
+  },
+  ...
+]
+</code></pre>
+
+<h2 id="post-smartmachinesnode"><span>POST /smartmachines/node</span></h2>
+
+<p>Creates Node SmartMachine. Api will respond with status 202, or 409</p>
+
+<h5>example request</h5>
+
+<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/smartmachines/node \
+  -F "coupon=123456789abcdefghijk" \
+  -F "subdomain="wicked"</code></pre>
+
+<h5>response</h5>
+
+<pre><code>{
+  "uri": "/smartmachines/node/9",
+  "transition_uri": "/smartmachines/node/9/progress"
 }
 </code></pre>
 

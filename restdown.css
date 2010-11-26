@@ -39,35 +39,51 @@ hr {
 	border-bottom:1px solid #FFFFFF;
 }
 
+code,
 pre {
   border:1px solid #CCCCCC;
   background:#F2F0EE;
   -webkit-border-radius:2px;
   -moz-border-radius:2px;
   border-radius:2px;
-  display:block;
-  padding:10px 1.2em;
   white-space:pre-wrap;
+}
+code {
+  padding: 0 0.2em;
+}
+pre {
+  margin: 1em 0;
+  padding: .75em;
+  overflow: auto;
+  padding:10px 1.2em;
   margin-top:0;
   margin-bottom:20px;
 }
+pre code  {
+  border: medium none;
+  padding: 0;
+}
+a code {
+  text-decoration: underline;
+}
+
+pre.shell,
+pre.shell code {
+  background:#444;
+  color:#fff;
+  border-width:0px;
+}
+code.prompt::before {
+  content: '$ ';
+  display: inline;
+}
+
 
 a {
   color:#FD6512;
   text-decoration:none;
 }
 
-/*code a {
-  color:inherit;
-  border-bottom:1px dotted #000000;
-  text-decoration:none;
-}*/
-
-/*a.external:after {
-  content: "*";
-  font-style: super;
-  opacity: .5;
-}*/
 
 #header {
   background:#C3BDB3;
@@ -85,7 +101,7 @@ a {
   width: 424px;
   height: 35px;
   display:block;
-  background: url(/images/logo.png) no-repeat;
+  background: url(logo.png) no-repeat;
   line-height:2.1em;
   padding:0;
   padding-left:140px;
@@ -154,7 +170,7 @@ a {
 #sidebar li span.verb {
   color:#aaa;
   padding:2px 3px 0px;
-  width:20px;
+  width:30px;
   display:block;
   float:left;
   font-size:9px;
@@ -165,54 +181,7 @@ a {
   margin-right:5px;
 }
 
-/*#sidebar .category li a:hover {
-  color:#652806;
-  font-family:monaco;
-}*/
 
-/*#sidebar a{
-  color:#333;
-}
-
-#sidebar li a:hover {
-  color:#242220;
-}
-
-#otherbar {
-  display:none;
-}*/
-
-/*blockquote,ul {
-  margin:30px 0px;
-}*/
-
-blockquote {
-  color:#000;
-	font-style:normal;
-  margin-left:35px;
-  padding-left:20px;
-	position:relative;
-	text-shadow:#FFFFFF 0px 1px 0px;
-}
-
-blockquote code {
-	font-style: normal;
-}
-
-blockquote p {
-  padding:10px 0px;
-}
-
-blockquote::before {
-  font-style: normal;
-  content: '\201C';
-  font-size: 450%;
-  font-family:Georgia, Palatino, 'Times New Roman', Times;;
-  position: absolute;
-  top: -10px;
-  left: -25px;
-  color: #E0E0E0;
-}
 
 h5{
   margin:0;
@@ -225,18 +194,8 @@ pre.endpoint{
   background:#e1eaef;
 }
 
-pre.shell {
-  background:#444;
-  color:#fff;
-  border-width:0px;
-}
-code.prompt::before {
-  content: '$ ';
-  display: inline;
-}
-
 li.category li.current, h1.welcome.current {
-  background-image:url(/images/tab.gif);
+  background-image:url(tab.gif);
   background-repeat: no-repeat;
   background-position:right;
 }

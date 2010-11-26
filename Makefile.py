@@ -75,7 +75,7 @@ class Markdown(markdown2.Markdown):
 def restdown(metadata, markdown):
     #TODO: START HERE
     # - "endpoint" JS. Does the new markup and lack of "enpoint fixed" work?
-    # - <pre class="req">  How? Hack it?
+    # - fill in content
 
     html = Markdown(**opts).convert(markdown)
     metadata["toc_html"] = html.toc_html
@@ -96,33 +96,7 @@ def restdown(metadata, markdown):
         <h1>%(title)s Documentation</h1>
     </div>
     <div id="sidebar">
-        <div class="vertical_divider"></div>
-        <ul id="categories">
-          <li class="category">
-            <h1 class="welcome current"><a href="/">Welcome</a></h1>
-          </li>
-          <li class="category">
-            <ul>
-                <li><span class="verb">GET</span><a href="/#GET-/account">/account</a></li>
-                <li><span class="verb">PUT</span><a href="/#PUT-/account">/account</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/account">/account</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys">/sshkeys</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/sshkeys">/sshkeys</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/sshkeys/:id">/sshkeys/:id</a></li>
-                <li><span class="verb">PUT</span><a href="/#PUT-/sshkeys/:id">/sshkeys/:id</a></li>
-                <li><span class="verb">DEL</span><a href="/#DELETE-/sshkeys/:id">/sshkeys/:id</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node">/smartmachines/node</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/smartmachines/node">/smartmachines/node</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id">/smartmachines/node/:id</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/progress">/smartmachines/node/:id/progress</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/smartmachines/node/:id/status">/smartmachines/node/:id/status</a></li>
-                <li><span class="verb">GET</span><a href="/#GET-/coupons">/coupons</a></li>
-                <li><span class="verb">POST</span><a href="/#POST-/♥">/♥</a></li>
-            </ul>
-          </li>
-        </ul>
-
-        %(toc_html)s
+%(toc_html)s
     </div>
     <div id="content">
 """ % metadata)
