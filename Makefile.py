@@ -54,9 +54,15 @@ class Markdown(markdown2.Markdown):
 
     _endpoint_header_re = re.compile(
         r'''^(<h2 id=".*?">)([A-Z]+\s+.*?)(</h2>)$''', re.M)
+    _pre_command_block_re = re.compile(r'<pre><code>\$ (.*?)</code></pre>', re.S)
     def postprocess(self, text):
-        return self._endpoint_header_re.sub(
+        # Add markup to endpoint h2's for styling.
+        text = self._endpoint_header_re.sub(
             r'\1<span>\2</span>\3', text)
+        # Add "req" class and sexify pre-blocks starting with '$'.
+        text = self._pre_command_block_re.sub(
+            r'<pre class="shell"><code class="prompt">\1</code></pre>', text)
+        return text
 
     _endpoint_re = re.compile(r'^([A-Z]+)(\s+)(.*?)$')
     def _toc_add_entry(self, level, id, name):
@@ -68,14 +74,7 @@ class Markdown(markdown2.Markdown):
 
 def restdown(metadata, markdown):
     #TODO: START HERE
-    # - "endpoint" styling
     # - "endpoint" JS. Does the new markup and lack of "enpoint fixed" work?
-    # - header-ids extra:
-    #   - add *which* header level to the "header_id_from_text" callback
-    #   - allow that callback to return None to not have an id (empty str
-    #     already works for that?)
-    #   - override that here to only put header ids for h1, h2
-    # - toc
     # - <pre class="req">  How? Hack it?
 
     html = Markdown(**opts).convert(markdown)

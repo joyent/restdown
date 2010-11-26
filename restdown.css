@@ -169,7 +169,7 @@ a {
   color:#652806;
   font-family:monaco;
 }*/
-  
+
 /*#sidebar a{
   color:#333;
 }
@@ -225,10 +225,14 @@ pre.endpoint{
   background:#e1eaef;
 }
 
-pre.req{
+pre.shell {
   background:#444;
   color:#fff;
   border-width:0px;
+}
+code.prompt::before {
+  content: '$ ';
+  display: inline;
 }
 
 li.category li.current, h1.welcome.current {
@@ -299,7 +303,3 @@ h2 span {
   word-spacing: 0.8em;  /* separate verb from path */
   color:#fff;
 }
-
-
-
-
