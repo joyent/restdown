@@ -37,44 +37,33 @@
         </ul>
 
         <ul>
-  <li><a href="#joyent-api">Joyent API</a>
-  <ul>
-    <li><a href="#all-api-calls-start-with">All API calls start with</a></li>
-    <li><a href="#path">Path</a></li>
-    <li><a href="#format">Format</a></li>
-    <li><a href="#status-codes">Status Codes</a></li>
-  </ul></li>
   <li><a href="#account">Account</a>
   <ul>
-    <li><a href="#get-account"><em>GET /account</em></a>
-    <ul>
-      <li><a href="#example-request">example request</a></li>
-      <li><a href="#response">response</a></li>
-    </ul></li>
+    <li><a href="#get-account"><span class="verb">GET</span> <span>/account</span></a></li>
   </ul></li>
 </ul>
 
     </div>
     <div id="content">
-<h1 id="joyent-api">Joyent API</h1>
+<h1>Joyent API</h1>
 
 <div class="basic_info"> 
 
-<h4 id="all-api-calls-start-with">All API calls start with</h4>
+<h4>All API calls start with</h4>
 
 <pre class="base important">
 https://api.no.de
 </pre>
 
-<h4 id="path">Path</h4>
+<h4>Path</h4>
 
 <p>For this documentation, we will assume every request begins with the above path.</p>
 
-<h4 id="format">Format</h4>
+<h4>Format</h4>
 
 <p>All calls are returned in <strong>JSON</strong>.</p>
 
-<h4 id="status-codes">Status Codes</h4>
+<h4>Status Codes</h4>
 
 <ul>
 <li><strong>200</strong> Successful GET and PUT.</li>
@@ -89,16 +78,16 @@ https://api.no.de
 
 <h1 id="account">Account</h1>
 
-<h2 id="get-account"><em>GET /account</em></h2>
+<h2 id="get-account"><span>GET /account</span></h2>
 
 <p>Expects basic auth to get an existing customer. API will return <strong>200</strong>.</p>
 
-<h5 id="example-request">example request</h5>
+<h5>example request</h5>
 
 <pre><code>$ curl -k -u jill:secret https://api.no.de/account
 </code></pre>
 
-<h5 id="response">response</h5>
+<h5>response</h5>
 
 <pre><code>{ 
   "username": "jill", 

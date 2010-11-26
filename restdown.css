@@ -134,27 +134,37 @@ a {
   margin-bottom:3px;
 }
 
-#sidebar ul{
-  margin:0;
-  margin:3px 0 10px;
+#sidebar ul {
+  margin:3px 0 10px 0;
 }
 
 #sidebar li {
-  margin:0px;
-  padding:0px;
+  margin:0;
+  padding:0;
   font-size:0.9em;
 }
 
 #sidebar li,
 #sidebar li a {
-  color:#0A1014;
+  color:#5C5954;
   list-style:none;
   padding:1px 0px 1px 2px;
 }
 
-#sidebar .category li a {
-  color:#5C5954;
+#sidebar li span.verb {
+  color:#aaa;
+  padding:2px 3px 0px;
+  width:20px;
+  display:block;
+  float:left;
+  font-size:9px;
+  font-family:verdana;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  margin-left:0px;
+  margin-right:5px;
 }
+
 /*#sidebar .category li a:hover {
   color:#652806;
   font-family:monaco;
@@ -221,32 +231,6 @@ pre.req{
   border-width:0px;
 }
 
-span.beta{
-  background:#E6E3D5;
-  border:1px solid #C1BA95;
-  color:#878369;
-  padding:0px 3px 1px;
-  font-size:9px;
-  font-family:verdana;
-  -moz-border-radius:3px;
-  -webkit-border-radius:3px;
-  margin-left:6px;
-}
-
-span.verb{
-  color:#aaa;
-  padding:2px 3px 0px;
-  width:20px;
-  display:block;
-  float:left;
-  font-size:9px;
-  font-family:verdana;
-  -moz-border-radius:3px;
-  -webkit-border-radius:3px;
-  margin-left:0px;
-  margin-right:5px;
-}
-
 li.category li.current, h1.welcome.current {
   background-image:url(/images/tab.gif);
   background-repeat: no-repeat;
@@ -304,9 +288,8 @@ div.endpoint.fixed{
   top:66px;
 }
 
-h2 em {
+h2 span {
   background: #979592;
-  font-style: normal;
   float:right;
   color:#fff;
   margin:0;

@@ -10,6 +10,9 @@ from mklib.common import MkError
 from mklib import Task, mk
 from mklib import sh
 
+sys.path.insert(0, expanduser("~/tm/python-markdown2/lib"))
+import markdown2
+
 
 class render(Task):
     """render no.de.markdown"""
@@ -40,6 +43,29 @@ opts = {
     }
 }
 
+
+class Markdown(markdown2.Markdown):
+    _seen_first_h1 = False
+    def header_id_from_text(self, text, prefix, n):
+        if n == 1 and not self._seen_first_h1:
+            self._seen_first_h1 = True
+        elif n in (1, 2):
+            return super(Markdown, self).header_id_from_text(text, prefix, n)
+
+    _endpoint_header_re = re.compile(
+        r'''^(<h2 id=".*?">)([A-Z]+\s+.*?)(</h2>)$''', re.M)
+    def postprocess(self, text):
+        return self._endpoint_header_re.sub(
+            r'\1<span>\2</span>\3', text)
+
+    _endpoint_re = re.compile(r'^([A-Z]+)(\s+)(.*?)$')
+    def _toc_add_entry(self, level, id, name):
+        if level == 2:
+            name = self._endpoint_re.sub(
+                r'<span class="verb">\1</span>\2<span>\3</span>', name)
+        super(Markdown, self)._toc_add_entry(level, id, name)
+
+
 def restdown(metadata, markdown):
     #TODO: START HERE
     # - "endpoint" styling
@@ -51,11 +77,12 @@ def restdown(metadata, markdown):
     #   - override that here to only put header ids for h1, h2
     # - toc
     # - <pre class="req">  How? Hack it?
-    sys.path.insert(0, expanduser("~/tm/python-markdown2/lib"))
-    import markdown2
 
-    html = markdown2.markdown(markdown, **opts)
+    html = Markdown(**opts).convert(markdown)
     metadata["toc_html"] = html.toc_html
+
+    print html.toc_html
+    print html._toc
 
     bits = []
     bits.append(u"""<!DOCTYPE html>
