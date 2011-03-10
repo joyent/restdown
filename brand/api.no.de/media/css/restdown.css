@@ -85,10 +85,6 @@ h5 {
 
 /* ---- custom classes */
 
-pre.endpoint {
-  background:#e1eaef;
-}
-
 pre.shell,
 pre.shell code {
   background:#444;
@@ -248,13 +244,13 @@ pre.shell code::before {
 
 
 
-h2.endpoint {
+h2 {
   overflow:auto;
   border-top:2px solid #979592;
   z-index:3;
 }
 
-h2.endpoint.fixed {
+h2.fixed {
   position:fixed;
   margin-top: 0;
   border-top:none;
@@ -262,7 +258,7 @@ h2.endpoint.fixed {
   top:66px;
 }
 
-h2.endpoint span {
+h2 span {
   background: #979592;
   float:right;
   color:#fff;

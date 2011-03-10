@@ -69,13 +69,13 @@ https://api.no.de
 </div>
 <h1 id="account">Account</h1>
 
-<h2 class="endpoint" id="GET-/account"><span>GET /account</span></h2>
+<h2 id="GET-/account"><span>GET /account</span></h2>
 
 <p>Expects basic auth to get an existing customer. API will return <strong>200</strong>.</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -k -u jill:secret https://api.no.de/account
+<pre class="shell"><code>curl -k -u jill:secret https://api.no.de/account
 </code></pre>
 
 <h5>response</h5>
@@ -89,14 +89,14 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 class="endpoint" id="PUT-/account"><span>PUT /account</span></h2>
+<h2 id="PUT-/account"><span>PUT /account</span></h2>
 
 <p>Update your account. Pass in any number of values. Possible responses include
 <code>200</code>, or <code>409</code>.</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/account -X PUT \
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/account -X PUT \
   -F 'phone=6041234567'
 </code></pre>
 
@@ -112,13 +112,13 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 class="endpoint" id="POST-/account"><span>POST /account</span></h2>
+<h2 id="POST-/account"><span>POST /account</span></h2>
 
 <p>Creates new account. Required fields are username, email password, and password_confirmation. Possible responses include 201 or 409</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl https://api.no.de/account \
+<pre class="shell"><code>curl https://api.no.de/account \
   -F "email=jill@joyent.com" \
   -F "username=jill" \
   -F "password=secret" \
@@ -139,13 +139,13 @@ https://api.no.de
 
 <h1 id="ssh-keys">SSH Keys</h1>
 
-<h2 class="endpoint" id="GET-/sshkeys"><span>GET /sshkeys</span></h2>
+<h2 id="GET-/sshkeys"><span>GET /sshkeys</span></h2>
 
 <p>Returns collection of public keys. Response will be 200</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys
 </code></pre>
 
 <h5>response</h5>
@@ -165,13 +165,13 @@ https://api.no.de
 ]
 </code></pre>
 
-<h2 class="endpoint" id="POST-/sshkeys"><span>POST /sshkeys</span></h2>
+<h2 id="POST-/sshkeys"><span>POST /sshkeys</span></h2>
 
 <p>Adds a new private key to your account. "key" is a required field and "name" is optional. "key" may be an a string or a file upload. Possible responses include 201 or 409.</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys \
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys \
   -F "name=laptop" -F "key=&lt;/Users/jill/.ssh/id_rsa.pub"
 </code></pre>
 
@@ -179,7 +179,7 @@ https://api.no.de
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys \
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys \
   -F "name=laptop" -F "key=@/Users/jill/.ssh/id_rsa.pub"
 </code></pre>
 
@@ -192,13 +192,13 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 class="endpoint" id="GET-/sshkeys/:id"><span>GET /sshkeys/:id</span></h2>
+<h2 id="GET-/sshkeys/:id"><span>GET /sshkeys/:id</span></h2>
 
 <p>Returns single resource with a public key. Possible responses 200, or 404</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys/42
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys/42
 </code></pre>
 
 <h5>response</h5>
@@ -210,13 +210,13 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 class="endpoint" id="PUT-/sshkeys/:id"><span>PUT /sshkeys/:id</span></h2>
+<h2 id="PUT-/sshkeys/:id"><span>PUT /sshkeys/:id</span></h2>
 
 <p>Updates public key record. Possible responses include 200, or 409</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys/42 -X PUT \
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys/42 -X PUT \
   -F "name=a better description"
 </code></pre>
 
@@ -229,24 +229,24 @@ https://api.no.de
 }
 </code></pre>
 
-<h2 class="endpoint" id="DELETE-/sshkeys/:id"><span>DELETE /sshkeys/:id</span></h2>
+<h2 id="DELETE-/sshkeys/:id"><span>DELETE /sshkeys/:id</span></h2>
 
 <p>Deletes public keys. Api will respond with status 204</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/sshkeys/42 -X DELETE
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys/42 -X DELETE
 </code></pre>
 
 <h1 id="node-service">Node Service</h1>
 
-<h2 class="endpoint" id="GET-/smartmachines/node"><span>GET /smartmachines/node</span></h2>
+<h2 id="GET-/smartmachines/node"><span>GET /smartmachines/node</span></h2>
 
 <p>Gets all Node SmartMachines. Api will respond with status 200</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/smartmachines/node
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/smartmachines/node
 </code></pre>
 
 <h5>response</h5>
@@ -268,13 +268,13 @@ https://api.no.de
 ]
 </code></pre>
 
-<h2 class="endpoint" id="POST-/smartmachines/node"><span>POST /smartmachines/node</span></h2>
+<h2 id="POST-/smartmachines/node"><span>POST /smartmachines/node</span></h2>
 
 <p>Creates Node SmartMachine. Api will respond with status 202, or 409</p>
 
 <h5>example request</h5>
 
-<pre class="shell"><code class="prompt">curl -u jill:secret https://api.no.de/smartmachines/node \
+<pre class="shell"><code>curl -u jill:secret https://api.no.de/smartmachines/node \
   -F "coupon=123456789abcdefghijk" \
   -F "subdomain="wicked"
 </code></pre>
@@ -307,11 +307,11 @@ $(function() {
         }
     }
 
-    $("h2.endpoint").each(function(i) {
+    $("h2").each(function(i) {
         offsets.push($(this).offset().top - headerHeight)
     });
 
-    $("#content").append('<h2 class="endpoint fixed" style="display: none"><span>&nbsp;</span></h2>');
+    $("#content").append('<h2 class="fixed" style="display: none"><span>&nbsp;</span></h2>');
     var fixed_h2 = $("h2.fixed");
     var fixed_span = $("h2.fixed span");
 
@@ -325,7 +325,7 @@ $(function() {
             if (current < 0) {
                 fixed_h2.hide();
             } else if (current >= 0) {
-                var heading = $($("h2.endpoint span")[current]).text();
+                var heading = $($("h2 span")[current]).text();
                 $("#sidebar a[href|=#" + heading.replace(' ', '-') + "]").parent().addClass("current");
                 fixed_span.text(heading);
                 fixed_h2.show();
