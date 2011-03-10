@@ -4,22 +4,21 @@ title: Joyent API
 
 # Joyent API
 
-<div class="basic_info" markdown="1">
-#### All API calls start with
+### All API calls start with
 
-<pre class="base important">
+<pre class="base">
 https://api.no.de
 </pre>
 
-#### Path
+### Path
 
 For this documentation, we will assume every request begins with the above path.
 
-#### Format
+### Format
 
 All calls are returned in **JSON**.
 
-#### Status Codes
+### Status Codes
 
 - **200** Successful GET and PUT.
 - **201** Successful POST.
@@ -27,7 +26,6 @@ All calls are returned in **JSON**.
 - **204** Successful DELETE
 - **401** Unauthenticated.
 - **409** Unsuccessful POST, PUT, or DELETE (Will return an errors object)
-</div>
 
 
 

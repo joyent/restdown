@@ -1,3 +1,6 @@
+
+/* ---- general styles */
+
 body {
   font: 13px "Lucida Grande", "Lucida Sans Unicode", arial, sans-serif;
   line-height: 1.53846; /* 20px */
@@ -5,7 +8,7 @@ body {
 }
 
 :focus {
-	outline: 0;
+  outline: 0;
 }
 
 h1,h2,h3 {
@@ -67,23 +70,38 @@ a code {
   text-decoration: underline;
 }
 
+a {
+  color:#FD6512;
+  text-decoration:none;
+}
+
+h5 {
+  margin:0;
+  padding:0;
+  line-height:1em;
+  display:inline;
+}
+
+
+/* ---- custom classes */
+
+pre.endpoint {
+  background:#e1eaef;
+}
+
 pre.shell,
 pre.shell code {
   background:#444;
   color:#fff;
   border-width:0px;
 }
-code.prompt::before {
+pre.shell code::before {
   content: '$ ';
   display: inline;
 }
 
 
-a {
-  color:#FD6512;
-  text-decoration:none;
-}
-
+/* ---- header and sidebar */
 
 #header {
   background:#C3BDB3;
@@ -181,62 +199,54 @@ a {
   margin-right:5px;
 }
 
-
-
-h5{
-  margin:0;
-  padding:0;
-  line-height:1em;
-  display:inline;
-}
-
-pre.endpoint{
-  background:#e1eaef;
-}
-
 #sidebar li.current {
   background-image:url(../img/tab.gif);
   background-repeat: no-repeat;
   background-position:right;
 }
 
-.basic_info{
+
+/* ---- intro */
+
+.intro {
   color:#29231A;
   padding: 22px 25px;
-	background: #EDEBEA;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-o-border-radius: 5px;
-	border-radius: 5px;
-	margin-bottom:40px;
+  background: #EDEBEA;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  margin-bottom:40px;
 }
-
-.basic_info pre.base{
+.intro pre.base {
   background:#444;
   color:#29231A;
   color:#fff;
   border-color:#fff;
   font-size:1.5em;
 }
-
-.basic_info h1{
-  color:#1C313C;
+.intro h1 {
+  color: #1C313C;
 }
-
-.basic_info h4, .basic_info p{
-  margin:5px 0px 3px;
+.intro h3 {
+  margin: 5px 0px 3px;
+  font-size: 100%;
+  font-weight: bold;
 }
-.basic_info ul{
+.intro ul {
   list-style-type:disc;
   padding-left:20px;
   margin-left:0;
 }
-.basic_info ul li{
+.intro ul li{
   margin:0;
 }
-.basic_info p{
+.intro p {
   padding-left:20px;
+  margin: 5px 0px 3px;
 }
+
+
 
 h2.endpoint {
   overflow:auto;

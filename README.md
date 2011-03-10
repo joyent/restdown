@@ -10,3 +10,13 @@ sex it up a bit.
 
 
 More details later. I'm still working on this.
+
+
+
+# Conventions in Restdown content
+
+- first h1 is the API title, and its body is an introduction to the API
+- subsequent h1's are API section titles
+- h2's are API endpoints
+- h3's are subsection headers within endpoints, if needed
+- h4's are ... XXX 
