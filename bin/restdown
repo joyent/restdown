@@ -1,0 +1,295 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""restdown -- Pretty REST API docs authored in Markdown
+
+Usage:
+    restdown foo.restdown
+
+Write a Markdown file that describes your REST API -- with some light
+convention structure to your doc file. Run it through `restdown` and out
+pops some nice HTML for your API. Choose one of the included brands and
+sex it up a bit.
+"""
+# TODO:
+# - cleanup the markup: h5 instead of h3, etc. is lame
+# - brand selection
+# - foo.json: JSON description of the API, perhaps useful
+
+__version_info__ = (0, 9, 0)
+__version__ = '.'.join(map(str, __version_info__))
+
+import re
+import time
+import sys
+import codecs
+from os.path import expanduser, basename, splitext, dirname, join
+from glob import glob
+import logging
+import optparse
+
+#TODO: bring in external
+sys.path.insert(0, expanduser("~/tm/python-markdown2/lib"))
+import markdown2
+
+
+#---- globals
+
+log = logging.getLogger("restdown")
+
+markdown_opts = {
+    "extras": {
+        "toc": True,
+        "markdown-in-html": True,
+    }
+}
+
+
+
+#---- restdown processor
+
+class Restdowner(markdown2.Markdown):
+    _skipped_first_h1 = False
+    def header_id_from_text(self, text, prefix, n):
+        if n == 1 and not self._skipped_first_h1:
+            self._skipped_first_h1 = True
+        elif n == 1:
+            return super(Restdowner, self).header_id_from_text(text, prefix, n)
+        elif n == 2:
+            # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
+            return text.replace(' ', '-')
+
+    _endpoint_header_re = re.compile(
+        r'''^(<h2)( id=".*?"*>)([A-Z]+\s+.*?)(</h2>)$''', re.M)
+    _pre_command_block_re = re.compile(r'<pre><code>\$ (.*?)</code></pre>', re.S)
+    def postprocess(self, text):
+        # Add markup to endpoint h2's for styling.
+        text = self._endpoint_header_re.sub(
+            r'\1 class="endpoint"\2<span>\3</span>\4', text)
+        # Identify shell pre-blocks for styling.
+        text = self._pre_command_block_re.sub(
+            r'<pre class="shell"><code class="prompt">\1</code></pre>', text)
+        return text
+
+    _endpoint_re = re.compile(r'^([A-Z]+)(\s+)(.*?)$')
+    def _toc_add_entry(self, level, id, name):
+        if level == 2:
+            name = self._endpoint_re.sub(
+                r'<span class="verb">\1</span>\2<span>\3</span>', name)
+        super(Restdowner, self)._toc_add_entry(level, id, name)
+
+def restdown_path(path):
+    markdown = codecs.open(path, 'r', 'utf-8').read()
+    metadata = {}
+    if markdown.startswith("---"):
+        _, metastr, markdown = re.compile(r"^---[ \t]*$", re.M).split(
+            markdown, 2)
+        for line in metastr.strip().splitlines(False):
+            line = line.strip()
+            if not line:
+                continue
+            k, v = line.split(':', 1)
+            metadata[k.strip()] = v.strip()
+    if "title" not in metadata:
+        title = ' '.join(s.capitalize()
+            for s in splitext(basename(path))[0].split('-'))
+        metadata["title"] = title
+    html = restdown(metadata, markdown)
+
+    base, ext = splitext(basename(path))
+    output_path = join(dirname(path), base + ".html")
+    codecs.open(output_path, "w", "utf-8").write(html)
+    print("restdown -> '%s'" % output_path)
+
+
+def restdown(metadata, markdown):
+    """Convert the given metadata and markdown content to restdown HTML.
+
+    @param metadata {dict} Relevant metadata keys are:
+            "title"    the HTML document title
+        TODO: add more of these for parameterizing things like branding images
+    @param markdown {str} The markdown content to convert
+    @returns {str} The HTML document (full page)
+    """
+    html = Restdowner(**markdown_opts).convert(markdown)
+    metadata["toc_html"] = html.toc_html
+
+    #print html.toc_html
+    #print html._toc
+
+    bits = []
+    bits.append(u"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>%(title)s</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="media/css/restdown.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+</head>
+<body>
+    <div id="header">
+        <h1>%(title)s Documentation</h1>
+    </div>
+    <div id="sidebar">
+%(toc_html)s
+    </div>
+    <div id="content">
+""" % metadata)
+    bits.append(html)
+    bits.append(u"""
+    </div>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+    var headerHeight = $("#header").height();
+    var offsets = [];
+    var current = -1;
+
+    function endpoint(scrollDistance) {
+        if (scrollDistance < offsets[0]) {
+            return -1;
+        } else {
+            for (var id = offsets.length; id > 0; id--) {
+                if (scrollDistance > offsets[id - 1]) {
+                    return id - 1;
+                    break;
+                }
+            }
+        }
+    }
+
+    $("h2.endpoint").each(function(i) {
+        offsets.push($(this).offset().top - headerHeight)
+    });
+
+    $("#content").append('<h2 class="endpoint fixed" style="display: none"><span>&nbsp;</span></h2>');
+    var fixed_h2 = $("h2.fixed");
+    var fixed_span = $("h2.fixed span");
+
+    $("#content").scroll(function() {
+        var scrollDistance = $("#content").attr('scrollTop');
+        var now = endpoint(scrollDistance);
+
+        if (now !== current) {
+            $("#sidebar li").removeClass("current");
+            current = now;
+            if (current < 0) {
+                fixed_h2.hide();
+            } else if (current >= 0) {
+                var heading = $($("h2.endpoint span")[current]).text();
+                $("#sidebar a[href|=#" + heading.replace(' ', '-') + "]").parent().addClass("current");
+                fixed_span.text(heading);
+                fixed_h2.show();
+            }
+        }
+    });
+});
+
+</script>
+</body>
+</html>""")
+    return u''.join(bits)
+
+
+#---- internal support stuff
+
+# Recipe: pretty_logging (0.1.2)
+class _PerLevelFormatter(logging.Formatter):
+    """Allow multiple format string -- depending on the log level.
+    
+    A "fmtFromLevel" optional arg is added to the constructor. It can be
+    a dictionary mapping a log record level to a format string. The
+    usual "fmt" argument acts as the default.
+    """
+    def __init__(self, fmt=None, datefmt=None, fmtFromLevel=None):
+        logging.Formatter.__init__(self, fmt, datefmt)
+        if fmtFromLevel is None:
+            self.fmtFromLevel = {}
+        else:
+            self.fmtFromLevel = fmtFromLevel
+    def format(self, record):
+        record.lowerlevelname = record.levelname.lower()
+        if record.levelno in self.fmtFromLevel:
+            #XXX This is a non-threadsafe HACK. Really the base Formatter
+            #    class should provide a hook accessor for the _fmt
+            #    attribute. *Could* add a lock guard here (overkill?).
+            _saved_fmt = self._fmt
+            self._fmt = self.fmtFromLevel[record.levelno]
+            try:
+                return logging.Formatter.format(self, record)
+            finally:
+                self._fmt = _saved_fmt
+        else:
+            return logging.Formatter.format(self, record)
+
+def _setup_logging():
+    hdlr = logging.StreamHandler(sys.stdout)
+    defaultFmt = "%(name)s: %(lowerlevelname)s: %(message)s"
+    fmtFromLevel = {logging.DEBUG: "%(name)s: %(message)s",
+                    logging.INFO: "%(message)s"}
+    fmtr = _PerLevelFormatter(fmt=defaultFmt, fmtFromLevel=fmtFromLevel)
+    hdlr.setFormatter(fmtr)
+    logging.root.addHandler(hdlr)
+
+class _NoReflowFormatter(optparse.IndentedHelpFormatter):
+    """An optparse formatter that does NOT reflow the description."""
+    def format_description(self, description):
+        return description or ""
+
+
+
+#---- mainline
+
+def main(argv=sys.argv):
+    _setup_logging()
+    log.setLevel(logging.INFO)
+
+    # Parse options.
+    parser = optparse.OptionParser(prog="restdown", usage='',
+        version="%prog " + __version__, description=__doc__,
+        formatter=_NoReflowFormatter())
+    parser.add_option("-v", "--verbose", dest="log_level",
+        action="store_const", const=logging.DEBUG,
+        help="more verbose output")
+    parser.add_option("-q", "--quiet", dest="log_level",
+        action="store_const", const=logging.WARNING,
+        help="quieter output (just warnings and errors)")
+    parser.set_default("log_level", logging.INFO)
+    opts, paths = parser.parse_args()
+    log.setLevel(opts.log_level)
+    
+    for path in paths:
+        restdown_path(path)
+
+## {{{ http://code.activestate.com/recipes/577258/ (r4)
+if __name__ == "__main__":
+    try:
+        retval = main(sys.argv)
+    except KeyboardInterrupt:
+        sys.exit(1)
+    except SystemExit:
+        raise
+    except:
+        import traceback, logging
+        if not log.handlers and not logging.root.handlers:
+            logging.basicConfig()
+        skip_it = False
+        exc_info = sys.exc_info()
+        if hasattr(exc_info[0], "__name__"):
+            exc_class, exc, tb = exc_info
+            if isinstance(exc, IOError) and exc.args[0] == 32:
+                # Skip 'IOError: [Errno 32] Broken pipe': often a cancelling of `less`.
+                skip_it = True
+            if not skip_it:
+                tb_path, tb_lineno, tb_func = traceback.extract_tb(tb)[-1][:3]
+                log.error("%s (%s:%s in %s)", exc_info[1], tb_path,
+                    tb_lineno, tb_func)
+        else:  # string exception
+            log.error(exc_info[0])
+        if not skip_it:
+            if log.isEnabledFor(logging.DEBUG):
+                print()
+                traceback.print_exception(*exc_info)
+            sys.exit(1)
+    else:
+        sys.exit(retval)
+## end of http://code.activestate.com/recipes/577258/ }}}

@@ -1,7 +1,7 @@
 body {
   font: 13px "Lucida Grande", "Lucida Sans Unicode", arial, sans-serif;
-	line-height: 1.53846; /* 20px */
-	color: #4a3f2d;
+  line-height: 1.53846; /* 20px */
+  color: #4a3f2d;
 }
 
 :focus {
@@ -26,17 +26,17 @@ ul {
 }
 
 ul > li {
-	list-style:disc;
-	list-style-position:inside;
-	margin:10px 0px;
+  list-style:disc;
+  list-style-position:inside;
+  margin:10px 0px;
 }
 
 hr {
-	border:none;
-	width:98%;
-	margin-left:-10px;
-	border-top:1px solid #CCCCCC;
-	border-bottom:1px solid #FFFFFF;
+  border:none;
+  width:98%;
+  margin-left:-10px;
+  border-top:1px solid #CCCCCC;
+  border-bottom:1px solid #FFFFFF;
 }
 
 code,
@@ -101,7 +101,7 @@ a {
   width: 424px;
   height: 35px;
   display:block;
-  background: url(logo.png) no-repeat;
+  background: url(../img/logo.png) no-repeat;
   line-height:2.1em;
   padding:0;
   padding-left:140px;
@@ -195,7 +195,7 @@ pre.endpoint{
 }
 
 #sidebar li.current {
-  background-image:url(tab.gif);
+  background-image:url(../img/tab.gif);
   background-repeat: no-repeat;
   background-position:right;
 }
