@@ -12,8 +12,8 @@ pops some nice HTML for your API. Choose one of the included brands and
 sex it up a bit.
 """
 # TODO:
-# - cleanup the markup: h5 instead of h3, etc. is lame
 # - brand selection
+# - current divide of sidebar/toc-scroll indicator btwn brand and core is unclean
 # - foo.json: JSON description of the API, perhaps useful
 
 __version_info__ = (0, 9, 0)
@@ -23,7 +23,7 @@ import re
 import time
 import sys
 import codecs
-from os.path import expanduser, basename, splitext, dirname, join
+from os.path import expanduser, basename, splitext, dirname, join, abspath
 from glob import glob
 import logging
 import optparse
@@ -36,6 +36,8 @@ import markdown2
 #---- globals
 
 log = logging.getLogger("restdown")
+
+DEFAULT_BRAND = "api.no.de"
 
 markdown_opts = {
     "extras": {
@@ -117,8 +119,8 @@ def restdown(metadata, markdown):
     """Convert the given metadata and markdown content to restdown HTML.
 
     @param metadata {dict} Relevant metadata keys are:
-            "title"    the HTML document title
-       TODO: add more of these for parameterizing things like branding images
+        "title"    the HTML document title
+        "brand"    the brand to use for styling/images etc.
     @param markdown {str} The markdown content to convert
     @returns {str} The HTML document (full page)
     """
@@ -128,76 +130,23 @@ def restdown(metadata, markdown):
     #print html.toc_html
     #print html._toc
 
-    bits = []
-    bits.append(u"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>%(title)s</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" href="media/css/restdown.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-</head>
-<body>
-    <div id="header">
-        <h1>%(title)s Documentation</h1>
-    </div>
+    brand_dir = join(dirname(dirname(abspath(__file__))), "brand",
+        metadata.get("brand", DEFAULT_BRAND))
+    header_in = codecs.open(join(brand_dir, "header.html.in"), 'r', 'utf-8').read()
+    header = header_in % metadata
+    footer_in = codecs.open(join(brand_dir, "footer.html.in"), 'r', 'utf-8').read()
+    footer = footer_in % metadata
+    
+    bits = [header]
+    bits.append(u"""
     <div id="sidebar">
 %(toc_html)s
     </div>
     <div id="content">
 """ % metadata)
     bits.append(html)
-    bits.append(u"""
-    </div>
-<script type="text/javascript" charset="utf-8">
-$(function() {
-    var headerHeight = $("#header").height();
-    var offsets = [];
-    var current = -1;
-
-    function endpoint(scrollDistance) {
-        if (scrollDistance < offsets[0]) {
-            return -1;
-        } else {
-            for (var id = offsets.length; id > 0; id--) {
-                if (scrollDistance > offsets[id - 1]) {
-                    return id - 1;
-                    break;
-                }
-            }
-        }
-    }
-
-    $("h2").each(function(i) {
-        offsets.push($(this).offset().top - headerHeight)
-    });
-
-    $("#content").append('<h2 class="fixed" style="display: none"><span>&nbsp;</span></h2>');
-    var fixed_h2 = $("h2.fixed");
-    var fixed_span = $("h2.fixed span");
-
-    $("#content").scroll(function() {
-        var scrollDistance = $("#content").attr('scrollTop');
-        var now = endpoint(scrollDistance);
-
-        if (now !== current) {
-            $("#sidebar li").removeClass("current");
-            current = now;
-            if (current < 0) {
-                fixed_h2.hide();
-            } else if (current >= 0) {
-                var heading = $($("h2 span")[current]).text();
-                $("#sidebar a[href|=#" + heading.replace(' ', '-') + "]").parent().addClass("current");
-                fixed_span.text(heading);
-                fixed_h2.show();
-            }
-        }
-    });
-});
-
-</script>
-</body>
-</html>""")
+    bits.append(u"\n    </div>\n")
+    bits.append(footer)
     return u''.join(bits)
 
 
