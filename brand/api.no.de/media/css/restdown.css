@@ -75,11 +75,12 @@ a {
   text-decoration:none;
 }
 
-h5 {
-  margin:0;
-  padding:0;
-  line-height:1em;
-  display:inline;
+h4 {
+  font-size: 85%;
+  margin: 0;
+  padding: 0;
+  line-height: 1em;
+  display: inline;
 }
 
 

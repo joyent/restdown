@@ -35,11 +35,11 @@ All calls are returned in **JSON**.
 
 Expects basic auth to get an existing customer. API will return **200**.
 
-##### example request
+#### example request
 
     $ curl -k -u jill:secret https://api.no.de/account
 
-##### response
+#### response
 
     {
       "username": "jill",
@@ -55,12 +55,12 @@ Expects basic auth to get an existing customer. API will return **200**.
 Update your account. Pass in any number of values. Possible responses include
 `200`, or `409`.
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/account -X PUT \
       -F 'phone=6041234567'
 
-##### response
+#### response
 
     {
       "username": "jill",
@@ -75,7 +75,7 @@ Update your account. Pass in any number of values. Possible responses include
 
 Creates new account. Required fields are username, email password, and password_confirmation. Possible responses include 201 or 409
 
-##### example request
+#### example request
 
     $ curl https://api.no.de/account \
       -F "email=jill@joyent.com" \
@@ -83,7 +83,7 @@ Creates new account. Required fields are username, email password, and password_
       -F "password=secret" \
       -F "password_confirmation=secret"
 
-##### response
+#### response
 
     {
       "username": "jill",
@@ -101,11 +101,11 @@ Creates new account. Required fields are username, email password, and password_
 
 Returns collection of public keys. Response will be 200
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/sshkeys
 
-##### response
+#### response
 
     [
       {
@@ -126,19 +126,19 @@ Returns collection of public keys. Response will be 200
 
 Adds a new private key to your account. "key" is a required field and "name" is optional. "key" may be an a string or a file upload. Possible responses include 201 or 409.
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/sshkeys \
       -F "name=laptop" -F "key=</Users/jill/.ssh/id_rsa.pub"
 
 OR (file upload)
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/sshkeys \
       -F "name=laptop" -F "key=@/Users/jill/.ssh/id_rsa.pub"
 
-##### response
+#### response
 
     {
       "uri": "/sshkeys/42",
@@ -151,11 +151,11 @@ OR (file upload)
 
 Returns single resource with a public key. Possible responses 200, or 404
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/sshkeys/42
 
-##### response
+#### response
 
     {
       "uri": "/sshkeys/42",
@@ -168,12 +168,12 @@ Returns single resource with a public key. Possible responses 200, or 404
 
 Updates public key record. Possible responses include 200, or 409
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/sshkeys/42 -X PUT \
       -F "name=a better description"
 
-##### response
+#### response
 
     {
       "uri": "/sshkeys/42",
@@ -186,7 +186,7 @@ Updates public key record. Possible responses include 200, or 409
 
 Deletes public keys. Api will respond with status 204
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/sshkeys/42 -X DELETE
 
@@ -198,11 +198,11 @@ Deletes public keys. Api will respond with status 204
 
 Gets all Node SmartMachines. Api will respond with status 200
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/smartmachines/node
 
-##### response
+#### response
 
     [
       {
@@ -225,13 +225,13 @@ Gets all Node SmartMachines. Api will respond with status 200
 
 Creates Node SmartMachine. Api will respond with status 202, or 409
 
-##### example request
+#### example request
 
     $ curl -u jill:secret https://api.no.de/smartmachines/node \
       -F "coupon=123456789abcdefghijk" \
       -F "subdomain="wicked"
 
-##### response
+#### response
 
     {
       "uri": "/smartmachines/node/9",

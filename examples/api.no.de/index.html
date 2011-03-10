@@ -73,12 +73,12 @@ https://api.no.de
 
 <p>Expects basic auth to get an existing customer. API will return <strong>200</strong>.</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -k -u jill:secret https://api.no.de/account
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>{
   "username": "jill",
@@ -94,13 +94,13 @@ https://api.no.de
 <p>Update your account. Pass in any number of values. Possible responses include
 <code>200</code>, or <code>409</code>.</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/account -X PUT \
   -F 'phone=6041234567'
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>{
   "username": "jill",
@@ -116,7 +116,7 @@ https://api.no.de
 
 <p>Creates new account. Required fields are username, email password, and password_confirmation. Possible responses include 201 or 409</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl https://api.no.de/account \
   -F "email=jill@joyent.com" \
@@ -125,7 +125,7 @@ https://api.no.de
   -F "password_confirmation=secret"
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>{
   "username": "jill",
@@ -143,12 +143,12 @@ https://api.no.de
 
 <p>Returns collection of public keys. Response will be 200</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>[
   {
@@ -169,7 +169,7 @@ https://api.no.de
 
 <p>Adds a new private key to your account. "key" is a required field and "name" is optional. "key" may be an a string or a file upload. Possible responses include 201 or 409.</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys \
   -F "name=laptop" -F "key=&lt;/Users/jill/.ssh/id_rsa.pub"
@@ -177,13 +177,13 @@ https://api.no.de
 
 <p>OR (file upload)</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys \
   -F "name=laptop" -F "key=@/Users/jill/.ssh/id_rsa.pub"
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>{
   "uri": "/sshkeys/42",
@@ -196,12 +196,12 @@ https://api.no.de
 
 <p>Returns single resource with a public key. Possible responses 200, or 404</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys/42
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>{
   "uri": "/sshkeys/42",
@@ -214,13 +214,13 @@ https://api.no.de
 
 <p>Updates public key record. Possible responses include 200, or 409</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys/42 -X PUT \
   -F "name=a better description"
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>{
   "uri": "/sshkeys/42",
@@ -233,7 +233,7 @@ https://api.no.de
 
 <p>Deletes public keys. Api will respond with status 204</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/sshkeys/42 -X DELETE
 </code></pre>
@@ -244,12 +244,12 @@ https://api.no.de
 
 <p>Gets all Node SmartMachines. Api will respond with status 200</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/smartmachines/node
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>[
   {
@@ -272,14 +272,14 @@ https://api.no.de
 
 <p>Creates Node SmartMachine. Api will respond with status 202, or 409</p>
 
-<h5>example request</h5>
+<h4>example request</h4>
 
 <pre class="shell"><code>curl -u jill:secret https://api.no.de/smartmachines/node \
   -F "coupon=123456789abcdefghijk" \
   -F "subdomain="wicked"
 </code></pre>
 
-<h5>response</h5>
+<h4>response</h4>
 
 <pre><code>{
   "uri": "/smartmachines/node/9",
