@@ -11,12 +11,8 @@ convention structure to your doc file. Run it through `restdown` and out
 pops some nice HTML for your API. Choose one of the included brands and
 sex it up a bit.
 """
-# TODO:
-# - brand selection
-# - current divide of sidebar/toc-scroll indicator btwn brand and core is unclean
-# - foo.json: JSON description of the API, perhaps useful
 
-__version_info__ = (0, 9, 0)
+__version_info__ = (1, 0, 0)
 __version__ = '.'.join(map(str, __version_info__))
 
 import re
@@ -25,7 +21,9 @@ import sys
 import codecs
 from os.path import expanduser, basename, splitext, dirname, join, abspath
 from glob import glob
+from pprint import pprint
 import logging
+import json
 import optparse
 
 #TODO: bring in external
@@ -107,12 +105,15 @@ def restdown_path(path):
         title = ' '.join(s.capitalize()
             for s in splitext(basename(path))[0].split('-'))
         metadata["title"] = title
-    html = restdown(metadata, markdown)
+    html, data = restdown(metadata, markdown)
 
     base, ext = splitext(basename(path))
-    output_path = join(dirname(path), base + ".html")
-    codecs.open(output_path, "w", "utf-8").write(html)
-    print("restdown -> '%s'" % output_path)
+    html_path = join(dirname(path), base + ".html")
+    codecs.open(html_path, "w", "utf-8").write(html)
+    json_path = join(dirname(path), base + ".json")
+    codecs.open(json_path, "w", "utf-8").write(
+        json.dumps(data, sort_keys=True, indent=2))
+    print("restdown -> %s %s" % (html_path, json_path))
 
 
 def restdown(metadata, markdown):
@@ -121,14 +122,16 @@ def restdown(metadata, markdown):
     @param metadata {dict} Relevant metadata keys are:
         "title"    the HTML document title
         "brand"    the brand to use for styling/images etc.
+        "version"  version string for the API
     @param markdown {str} The markdown content to convert
-    @returns {str} The HTML document (full page)
+    @returns {str, dict} The HTML document (full page) and a dict giving
+        data about the API: version, endpoints.
     """
     html = Restdowner(**markdown_opts).convert(markdown)
     metadata["toc_html"] = html.toc_html
 
     #print html.toc_html
-    #print html._toc
+    #pprint(html._toc)
 
     brand_dir = join(dirname(dirname(abspath(__file__))), "brand",
         metadata.get("brand", DEFAULT_BRAND))
@@ -147,7 +150,16 @@ def restdown(metadata, markdown):
     bits.append(html)
     bits.append(u"\n    </div>\n")
     bits.append(footer)
-    return u''.join(bits)
+    
+    endpoints = [name.split('-', 1)
+        for n, name, html in html._toc if n == 2]
+    data = {
+        "endpoints": ["%-6s %s" % tuple(e) for e in endpoints],
+    }
+    if "version" in metadata:
+        data["version"] = metadata["version"]
+    return u''.join(bits), data
+
 
 
 #---- internal support stuff
