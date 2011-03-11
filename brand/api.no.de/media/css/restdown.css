@@ -246,9 +246,13 @@ pre.shell code::before {
 
 
 h2 {
-  overflow:auto;
-  border-top:2px solid #979592;
-  z-index:3;
+  overflow: auto;
+  margin-top: 60px;
+  border-top: 2px solid #979592;
+  z-index: 3;
+}
+h1 + h2 {
+  margin-top: 0px;
 }
 
 h2.fixed {
