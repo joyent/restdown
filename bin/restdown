@@ -12,14 +12,16 @@ pops some nice HTML for your API. Choose one of the included brands and
 sex it up a bit.
 """
 
-__version_info__ = (1, 0, 0)
+__version_info__ = (1, 1, 0)
 __version__ = '.'.join(map(str, __version_info__))
 
 import re
 import time
 import sys
+import os
 import codecs
-from os.path import expanduser, basename, splitext, dirname, join, abspath
+import shutil
+from os.path import expanduser, basename, splitext, dirname, join, abspath, isdir, exists
 from glob import glob
 from pprint import pprint
 import logging
@@ -43,6 +45,10 @@ markdown_opts = {
         "markdown-in-html": True,
     }
 }
+
+
+class RestdownError(StandardError):
+    pass
 
 
 
@@ -89,7 +95,7 @@ class Restdowner(markdown2.Markdown):
                 r'<span class="verb">\1</span>\2<span>\3</span>', name)
         super(Restdowner, self)._toc_add_entry(level, id, name)
 
-def restdown_path(path):
+def restdown_path(path, copy_brand_media_to=None):
     markdown = codecs.open(path, 'r', 'utf-8').read()
     metadata = {}
     if markdown.startswith("---"):
@@ -110,11 +116,18 @@ def restdown_path(path):
     base, ext = splitext(basename(path))
     html_path = join(dirname(path), base + ".html")
     codecs.open(html_path, "w", "utf-8").write(html)
+    log.info("wrote %s", html_path)
     json_path = join(dirname(path), base + ".json")
     codecs.open(json_path, "w", "utf-8").write(
-        json.dumps(data, sort_keys=True, indent=2))
-    print("restdown -> %s %s" % (html_path, json_path))
+        json.dumps(data, sort_keys=True, indent=2) + "\n")
+    log.info("wrote %s", json_path)
 
+    if copy_brand_media_to is not None:
+        if not isdir(copy_brand_media_to):
+            raise RestdownError("'%s' does not exist or is not a dir" % copy_brand_media_to)
+        src = join(_get_brand_dir(metadata.get("brand")), "media")
+        dst = join(copy_brand_media_to, "media")
+        _copy_dir(src, dst)
 
 def restdown(metadata, markdown):
     """Convert the given metadata and markdown content to restdown HTML.
@@ -133,8 +146,7 @@ def restdown(metadata, markdown):
     #print html.toc_html
     #pprint(html._toc)
 
-    brand_dir = join(dirname(dirname(abspath(__file__))), "brand",
-        metadata.get("brand", DEFAULT_BRAND))
+    brand_dir = _get_brand_dir(metadata.get("brand"))
     header_in = codecs.open(join(brand_dir, "header.html.in"), 'r', 'utf-8').read()
     header = header_in % metadata
     footer_in = codecs.open(join(brand_dir, "footer.html.in"), 'r', 'utf-8').read()
@@ -164,41 +176,55 @@ def restdown(metadata, markdown):
 
 #---- internal support stuff
 
-# Recipe: pretty_logging (0.1.2)
-class _PerLevelFormatter(logging.Formatter):
-    """Allow multiple format string -- depending on the log level.
+def _copy_dir(src, dst):
+    """Copy `src` dir to `dst` dir, updating already existing files.
     
-    A "fmtFromLevel" optional arg is added to the constructor. It can be
-    a dictionary mapping a log record level to a format string. The
-    usual "fmt" argument acts as the default.
+    Note: This does NOT delete files in dst that don't exist in src.
     """
-    def __init__(self, fmt=None, datefmt=None, fmtFromLevel=None):
-        logging.Formatter.__init__(self, fmt, datefmt)
-        if fmtFromLevel is None:
-            self.fmtFromLevel = {}
-        else:
-            self.fmtFromLevel = fmtFromLevel
+    for dirpath, dirnames, filenames in os.walk(src):
+        for f in filenames:
+            srcpath = join(dirpath, f)
+            if dirpath == src:
+                dstpath = join(dst, f)
+            else:
+                dstpath = join(dst, dirpath[len(src)+1:], f)
+            if not exists(dirname(dstpath)):
+                os.makedirs(dirname(dstpath))
+            dstpath_exists = exists(dstpath)
+            if dstpath_exists and _md5path(dstpath) == _md5path(srcpath):
+                pass
+            else:
+                if dstpath_exists:
+                    log.info("update %s", dstpath)
+                else:
+                    log.info("cp %s", dstpath)
+                shutil.copy(srcpath, dstpath)
+
+def _md5path(path):
+    try:
+        from hashlib import md5
+    except ImportError:
+        from md5 import md5
+    f = open(path, 'rb')
+    try:
+        return md5(f.read()).hexdigest()
+    finally:
+        f.close()
+
+def _get_brand_dir(brand=None):
+    if brand is None:
+        brand = DEFAULT_BRAND
+    return join(dirname(dirname(abspath(__file__))), "brand", brand)
+
+class _LowerLevelNameFormatter(logging.Formatter):
     def format(self, record):
         record.lowerlevelname = record.levelname.lower()
-        if record.levelno in self.fmtFromLevel:
-            #XXX This is a non-threadsafe HACK. Really the base Formatter
-            #    class should provide a hook accessor for the _fmt
-            #    attribute. *Could* add a lock guard here (overkill?).
-            _saved_fmt = self._fmt
-            self._fmt = self.fmtFromLevel[record.levelno]
-            try:
-                return logging.Formatter.format(self, record)
-            finally:
-                self._fmt = _saved_fmt
-        else:
-            return logging.Formatter.format(self, record)
+        return logging.Formatter.format(self, record)
 
 def _setup_logging():
     hdlr = logging.StreamHandler(sys.stdout)
-    defaultFmt = "%(name)s: %(lowerlevelname)s: %(message)s"
-    fmtFromLevel = {logging.DEBUG: "%(name)s: %(message)s",
-                    logging.INFO: "%(message)s"}
-    fmtr = _PerLevelFormatter(fmt=defaultFmt, fmtFromLevel=fmtFromLevel)
+    fmt = "%(name)s: %(lowerlevelname)s: %(message)s"
+    fmtr = _LowerLevelNameFormatter(fmt=fmt)
     hdlr.setFormatter(fmtr)
     logging.root.addHandler(hdlr)
 
@@ -225,12 +251,14 @@ def main(argv=sys.argv):
     parser.add_option("-q", "--quiet", dest="log_level",
         action="store_const", const=logging.WARNING,
         help="quieter output (just warnings and errors)")
-    parser.set_default("log_level", logging.INFO)
+    parser.add_option("-m", "--copy-brand-media-to", metavar="DIR",
+        help="also copy brand 'media/' dir to the given output dir")
+    parser.set_defaults(log_level=logging.INFO, copy_brand_media_to=None)
     opts, paths = parser.parse_args()
     log.setLevel(opts.log_level)
     
     for path in paths:
-        restdown_path(path)
+        restdown_path(path, copy_brand_media_to=opts.copy_brand_media_to)
 
 ## {{{ http://code.activestate.com/recipes/577258/ (r4)
 if __name__ == "__main__":
