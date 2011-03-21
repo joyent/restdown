@@ -84,6 +84,7 @@ h4 {
 }
 
 
+
 /* ---- custom classes */
 
 pre.shell,
@@ -274,3 +275,28 @@ h2 span {
   word-spacing: 0.8em;  /* separate verb from path */
   color:#fff;
 }
+
+
+
+
+/*---- print media */
+
+@media print {
+  body { background:white; color:black; margin:0; }
+  #sidebar {
+    display: none;
+  }
+  #content {
+    position: relative;
+    padding: 5px;
+    left: 0px;
+    top: 0px;
+  }
+  h1, h2, h4 {
+    page-break-after: avoid;
+  }
+  pre {
+    page-break-inside: avoid;
+  }
+}
+
