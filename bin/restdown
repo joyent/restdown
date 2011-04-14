@@ -28,8 +28,7 @@ import logging
 import json
 import optparse
 
-#TODO: bring in external
-sys.path.insert(0, expanduser("~/tm/python-markdown2/lib"))
+sys.path.insert(0, join(dirname(dirname(abspath(__file__))), "externals", "lib"))
 import markdown2
 
 
