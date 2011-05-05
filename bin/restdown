@@ -12,7 +12,7 @@ pops some nice HTML for your API. Choose one of the included brands and
 sex it up a bit.
 """
 
-__version_info__ = (1, 1, 0)
+__version_info__ = (1, 2, 0)
 __version__ = '.'.join(map(str, __version_info__))
 
 import re
@@ -28,8 +28,13 @@ import logging
 import json
 import optparse
 
-sys.path.insert(0, join(dirname(dirname(abspath(__file__))), "externals", "lib"))
+_saved_path = sys.path[:]
+sys.path.insert(0, join(dirname(dirname(abspath(__file__))), "externals", "lib")) # dev layout
+sys.path.insert(0, join(dirname(__file__))) # allow markdown2.py in same dir
 import markdown2
+sys.path = _saved_path
+del _saved_path
+
 
 
 #---- globals
@@ -94,7 +99,7 @@ class Restdowner(markdown2.Markdown):
                 r'<span class="verb">\1</span>\2<span>\3</span>', name)
         super(Restdowner, self)._toc_add_entry(level, id, name)
 
-def restdown_path(path, copy_brand_media_to=None):
+def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
     markdown = codecs.open(path, 'r', 'utf-8').read()
     metadata = {}
     if markdown.startswith("---"):
@@ -110,7 +115,7 @@ def restdown_path(path, copy_brand_media_to=None):
         title = ' '.join(s.capitalize()
             for s in splitext(basename(path))[0].split('-'))
         metadata["title"] = title
-    html, data = restdown(metadata, markdown)
+    html, data = restdown(metadata, markdown, brand_dir)
 
     base, ext = splitext(basename(path))
     html_path = join(dirname(path), base + ".html")
@@ -128,7 +133,7 @@ def restdown_path(path, copy_brand_media_to=None):
         dst = join(copy_brand_media_to, "media")
         _copy_dir(src, dst)
 
-def restdown(metadata, markdown):
+def restdown(metadata, markdown, brand_dir=None):
     """Convert the given metadata and markdown content to restdown HTML.
 
     @param metadata {dict} Relevant metadata keys are:
@@ -136,6 +141,9 @@ def restdown(metadata, markdown):
         "brand"    the brand to use for styling/images etc.
         "version"  version string for the API
     @param markdown {str} The markdown content to convert
+    @param brand_dir {str} Brand directory (including a 'header.html.in' et al)
+        to use. If not given it uses the default brand in the restdown
+        installation.
     @returns {str, dict} The HTML document (full page) and a dict giving
         data about the API: version, endpoints.
     """
@@ -145,7 +153,8 @@ def restdown(metadata, markdown):
     #print html.toc_html
     #pprint(html._toc)
 
-    brand_dir = _get_brand_dir(metadata.get("brand"))
+    if brand_dir is None:
+        brand_dir = _get_brand_dir(metadata.get("brand"))
     header_in = codecs.open(join(brand_dir, "header.html.in"), 'r', 'utf-8').read()
     header = header_in % metadata
     footer_in = codecs.open(join(brand_dir, "footer.html.in"), 'r', 'utf-8').read()
@@ -252,12 +261,17 @@ def main(argv=sys.argv):
         help="quieter output (just warnings and errors)")
     parser.add_option("-m", "--copy-brand-media-to", metavar="DIR",
         help="also copy brand 'media/' dir to the given output dir")
-    parser.set_defaults(log_level=logging.INFO, copy_brand_media_to=None)
+    parser.add_option("-b", "--brand-dir", metavar="DIR",
+        help="brand dir to use for constructing HTML. Defaults to "
+             "'brand/%s' in the restdown install." % DEFAULT_BRAND)
+    parser.set_defaults(log_level=logging.INFO, copy_brand_media_to=None,
+        brand_dir=None)
     opts, paths = parser.parse_args()
     log.setLevel(opts.log_level)
     
     for path in paths:
-        restdown_path(path, copy_brand_media_to=opts.copy_brand_media_to)
+        restdown_path(path, brand_dir=opts.brand_dir,
+            copy_brand_media_to=opts.copy_brand_media_to)
 
 ## {{{ http://code.activestate.com/recipes/577258/ (r4)
 if __name__ == "__main__":
