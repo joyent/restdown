@@ -129,7 +129,7 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
     if copy_brand_media_to is not None:
         if not isdir(copy_brand_media_to):
             raise RestdownError("'%s' does not exist or is not a dir" % copy_brand_media_to)
-        src = join(_get_brand_dir(metadata.get("brand")), "media")
+        src = join(brand_dir or _get_brand_dir(metadata.get("brand")), "media")
         dst = join(copy_brand_media_to, "media")
         _copy_dir(src, dst)
 
