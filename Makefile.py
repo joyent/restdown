@@ -24,9 +24,9 @@ class cut_a_release(Task):
     """automate the steps for cutting a release"""
     proj_name = "restdown"
     version_py_path = "bin/restdown"
-    _changes_parser = re.compile(r'^## %s (?P<ver>[\d\.abc]+)'
+    _changes_parser = re.compile(r'^## restdown (?P<ver>[\d\.abc]+)'
         r'(?P<nyr>\s+\(not yet released\))?'
-        r'(?P<body>.*?)(?=^##|\Z)' % proj_name, re.M | re.S)
+        r'(?P<body>.*?)(?=^##|\Z)', re.M | re.S)
 
     def make(self):
         DRY_RUN = False
