@@ -41,7 +41,7 @@ del _saved_path
 
 log = logging.getLogger("restdown")
 
-DEFAULT_BRAND = "api.no.de"
+DEFAULT_BRAND = "ohthejoy"
 
 markdown_opts = {
     "extras": {

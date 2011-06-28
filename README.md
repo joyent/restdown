@@ -6,8 +6,6 @@
         $ cat api.restdown    # or api.md or index.markdown whatever
         ---
         title: My Awesome REST API
-        brand: api.no.de
-        version: 1.0.0
         ---
         
         # My Awesome REST API
@@ -27,14 +25,11 @@
 2. Run it through `restdown` and out pops (a) "api.html", fairly light semantic
    HTML5 for your API; and (b) "api.json", a JSON representation of your API.
    
-        $ restdown api.restdown
+        $ restdown -m STATICDIR api.restdown
 
-3. Set it up for however you serve static content so that "./media" relative
-   to your "api.html" file is a copy of or points to "brand/api.no.de".
+   where "STATICDIR" is a path to your static content served dir.
 
-You should now have pretty decent looking REST API docs, looking something like
-<https://api.no.de> (this style might have diverged since the time of this
-writing).
+You should now have pretty decent looking REST API docs.
 
 
 
@@ -44,23 +39,24 @@ writing).
 - Subsequent `h1`'s are API section titles. If your whole API is one logical
   grouping then you might need that second `h1` anyway. This should be fixed
   if that is the case.
-- `h2`'s are API endpoints of the form "HTTP-VERB URL-PATH".
+- `h2`'s are API endpoints of the form "HTTP-VERB URL-PATH". For example:
+  `GET /widgets/:id`. This format is not required though.
 - `h3`'s are just normal subsection headers within endpoints, if needed for
   longer documentation for a particular endpoint.
 - `h4`'s are typically for showing example request and response output for
   an endpoint. A `pre`-block inside an `h4` will get a CSS class.
 
-... probably some more conventions that I'm missing.
-
 
 # Brands
 
 A "brand" is a directory with all of the styling (CSS, JS, images) for a
-restdown-created .html file. Currently this project only has one -- based
-on the styling of <https://api.no.de>. I should add more.
+restdown-created .html file. The default brand is called "ohthejoy". It was
+originally derived from the styling of <https://api.no.de>. I should add more.
 
 The idea is that you can start with the brand here and tweak it to create your
-or style.
+or style. You can use your own brand files (for your own HTML/CSS/image
+tweaks). Start by copying one of the brands in the restdown/brands directory
+and then use the "-b|--brand" option to restdown.
 
 
 # api.json
@@ -73,8 +69,7 @@ The generated "api.json" file currently looks like this:
         "POST   /wuzzers", 
         "DELETE /wuzzers",
         ...
-      ], 
-      "version": "1.0.0"
+      ]
     }
 
 This might or might not be useful to you. For example, a request to
@@ -82,7 +77,6 @@ This might or might not be useful to you. For example, a request to
 
     $ curl https://api.no.de/
     {
-      "version": "v1",
       "endpoints": [
         "GET  /",
         "GET  /account",
