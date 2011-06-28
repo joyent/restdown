@@ -12,7 +12,7 @@ pops some nice HTML for your API. Choose one of the included brands and
 sex it up a bit.
 """
 
-__version_info__ = (1, 2, 1)
+__version_info__ = (1, 2, 2)
 __version__ = '.'.join(map(str, __version_info__))
 
 import re

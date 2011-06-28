@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.2 (not yet released)
+
+(nothing)
+
 
 ## restdown 1.2.1
 
