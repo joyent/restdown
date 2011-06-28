@@ -1,6 +1,11 @@
 # restdown Changelog
 
 
+## restdown 1.2.1
+
+- [issue #1] Allow h2 text (for endpoints) to NOT be the "VERB RESOURCE" format.
+
+
 ## restdown 1.2.0
 
 - Add "-b|--brand-dir DIR" option for specifying a local brand dir to use.
