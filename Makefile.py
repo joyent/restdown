@@ -83,14 +83,13 @@ class cut_a_release(Task):
         curr_tags = set(t for t in _capture_stdout(["git", "tag", "-l"]).split('\n') if t)
         if not DRY_RUN and version not in curr_tags:
             self.log.info("tag the release")
-            #XXX
-            #sh.run('git tag -a "%s" -m "version %s"' % (version, version),
-            #    self.log.debug)
-            #sh.run('git push --tags', self.log.debug)
-        XXX
+            sh.run('git tag -a "%s" -m "version %s"' % (version, version),
+                self.log.debug)
+            sh.run('git push --tags', self.log.debug)
 
         # Commits to prepare for future dev and push.
-        next_version = self._get_next_version(version)
+        next_version_info = self._get_next_version_info(version_info)
+        next_version = self._version_from_version_info(next_version_info)
         self.log.info("prepare for future dev (version %s)", next_version)
         marker = "## %s %s\n" % (self.proj_name, version)
         if marker not in changes_txt:
@@ -106,9 +105,8 @@ class cut_a_release(Task):
 
         ver_path = join(self.dir, normpath(self.version_py_path))
         ver_content = codecs.open(ver_path, 'r', 'utf-8').read()
-        version_tuple = self._tuple_from_version(version)
         next_version_tuple = self._tuple_from_version(next_version)
-        marker = "__version_info__ = %r" % (version_tuple,)
+        marker = "__version_info__ = %r" % (version_info,)
         if marker not in ver_content:
             raise MkError("couldn't find `%s' version marker in `%s' "
                 "content: can't prep for subsequent dev" % (marker, ver_path))
@@ -132,13 +130,10 @@ class cut_a_release(Task):
                 return s
         return tuple(_intify(b) for b in version.split('.'))
 
-    def _get_next_version(self, version):
-        last_bit = version.rsplit('.', 1)[-1]
-        try:
-            last_bit = int(last_bit)
-        except ValueError: # e.g. "1a2"
-            last_bit = int(re.split('[abc]', last_bit, 1)[-1])
-        return version[:-len(str(last_bit))] + str(last_bit + 1)
+    def _get_next_version_info(self, version_info):
+        next = list(version_info[:])
+        next[-1] += 1
+        return tuple(next)
 
     def _version_from_version_info(self, version_info):
         v = str(version_info[0])
@@ -201,3 +196,9 @@ def query_yes_no(question, default="yes"):
             sys.stdout.write("Please respond with 'yes' or 'no' "\
                              "(or 'y' or 'n').\n")
 ## end of http://code.activestate.com/recipes/577058/ }}}
+
+def _capture_stdout(argv):
+    import subprocess
+    p = subprocess.Popen(argv, stdout=subprocess.PIPE)
+    return p.communicate()[0]
+
