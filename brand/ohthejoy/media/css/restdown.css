@@ -290,6 +290,11 @@ h3:first-child {
   }
   pre {
     page-break-inside: avoid;
+    border: 1px solid #CCCCCC !important;
+  }
+  pre, code {
+    background: white !important;
+    color: black !important;
   }
 }
 

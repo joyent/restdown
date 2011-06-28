@@ -2,7 +2,8 @@
 
 ## restdown 1.2.3 (not yet released)
 
-(nothing yet)
+- Fix print styling of pre.shell blocks.
+
 
 ## restdown 1.2.2
 
