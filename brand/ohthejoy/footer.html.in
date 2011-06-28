@@ -1,15 +1,20 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
     var headerHeight = $("#header").height();
-    var offsets = [];
-    var current = -1;
 
-    function endpoint(scrollDistance) {
-        if (scrollDistance < offsets[0]) {
+    var sections = $("#content h1[id], #content h2[id]");
+    var sectionOffsets = [];
+    sections.each(function(elem) {
+        sectionOffsets.push($(this).offset().top - headerHeight);
+    });
+
+    var currSectionIdx = -1;
+    function getSectionIdx(scrollDistance) {
+        if (scrollDistance < sectionOffsets[0]) {
             return -1;
         } else {
-            for (var id = offsets.length; id > 0; id--) {
-                if (scrollDistance > offsets[id - 1]) {
+            for (var id = sectionOffsets.length; id > 0; id--) {
+                if (scrollDistance > sectionOffsets[id - 1]) {
                     return id - 1;
                     break;
                 }
@@ -17,28 +22,23 @@ $(function() {
         }
     }
 
-    $("h2").each(function(i) {
-        offsets.push($(this).offset().top - headerHeight)
-    });
-
-    $("#content").append('<h2 class="fixed" style="display: none"><span>&nbsp;</span></h2>');
-    var fixed_h2 = $("h2.fixed");
-    var fixed_span = $("h2.fixed span");
-
     $("#content").scroll(function() {
         var scrollDistance = $("#content").attr('scrollTop');
-        var now = endpoint(scrollDistance);
-
-        if (now !== current) {
+        var sectionIdx = getSectionIdx(scrollDistance);
+    
+        if (sectionIdx !== currSectionIdx) {
             $("#sidebar li").removeClass("current");
-            current = now;
-            if (current < 0) {
-                fixed_h2.hide();
-            } else if (current >= 0) {
-                var heading = $($("h2 span")[current]).text();
-                $("#sidebar a[href|=#" + heading.replace(' ', '-') + "]").parent().addClass("current");
-                fixed_span.text(heading);
-                fixed_h2.show();
+            currSectionIdx = sectionIdx;
+            if (currSectionIdx >= 0) {
+                var heading = $(sections[currSectionIdx]).text();
+                var possibleAnchors = [
+                    heading.replace(/ /g, '-'),
+                    heading.replace(/ /g, '-').toLowerCase()
+                ]
+                console.log("XXX possibleAnchors: "+possibleAnchors)
+                for (var i=0; i < possibleAnchors.length; i++) {
+                    $("#sidebar a[href|=#" + possibleAnchors[i] + "]").parent().addClass("current");
+                }
             }
         }
     });

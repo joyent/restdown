@@ -181,8 +181,13 @@ pre.shell code::before {
 #sidebar li,
 #sidebar li a {
   color:#5C5954;
+}
+#sidebar li {
   list-style:none;
-  padding:1px 0px 1px 2px;
+  padding:1px 0px 1px 0px;
+}
+#sidebar ul ul {
+  padding-left: 10px;
 }
 
 #sidebar li span.verb {
@@ -200,9 +205,9 @@ pre.shell code::before {
 }
 
 #sidebar li.current {
-  background-image:url(../img/tab.gif);
+  background-image: url(../img/tab.gif);
   background-repeat: no-repeat;
-  background-position:right;
+  background-position: right top;
 }
 
 
@@ -255,26 +260,6 @@ pre.shell code::before {
 }
 h1 + h2 {
   margin-top: 0px;
-}
-
-h2.fixed {
-  position:fixed;
-  margin-top: 0;
-  border-top:none;
-  right:45px;
-  top:66px;
-}
-
-h2 span {
-  background: #979592;
-  float:right;
-  color:#fff;
-  margin:0;
-  margin-left:3px;
-  padding:0.3em 0.7em;
-  font-size: 0.55em;
-  word-spacing: 0.8em;  /* separate verb from path */
-  color:#fff;
 }
 
 h3 {
