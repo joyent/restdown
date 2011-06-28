@@ -2,7 +2,7 @@
 
 ## restdown 1.2.2 (not yet released)
 
-- New default "ohthejoy" brand. Will eventually have some improvements.
+- New default "ohthejoy" brand. Improvements: header styling for better section separation.
 - Strip trailing whitespace in create api JSON file.
 
 
