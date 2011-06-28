@@ -10,6 +10,8 @@ Write a Markdown file that describes your REST API -- with some light
 convention structure to your doc file. Run it through `restdown` and out
 pops some nice HTML for your API. Choose one of the included brands and
 sex it up a bit.
+
+See <https://github.com/trentm/restdown> for more info.
 """
 
 __version_info__ = (1, 2, 2)
@@ -122,8 +124,9 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
     codecs.open(html_path, "w", "utf-8").write(html)
     log.info("wrote %s", html_path)
     json_path = join(dirname(path), base + ".json")
-    codecs.open(json_path, "w", "utf-8").write(
-        json.dumps(data, sort_keys=True, indent=2) + "\n")
+    json_str = json.dumps(data, sort_keys=True, indent=2) + '\n'
+    json_str = re.compile(r' +$', re.M).sub('', json_str)  # trailing whitespace sucks
+    codecs.open(json_path, "w", "utf-8").write(json_str)
     log.info("wrote %s", json_path)
 
     if copy_brand_media_to is not None:

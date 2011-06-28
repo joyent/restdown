@@ -2,7 +2,8 @@
 
 ## restdown 1.2.2 (not yet released)
 
-(nothing)
+- New default "ohthejoy" brand. Will eventually have some improvements.
+- Strip trailing whitespace in create api JSON file.
 
 
 ## restdown 1.2.1
