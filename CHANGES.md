@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.4 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.3
 
 - ["ohthejoy" brand] Fix print styling of pre.shell blocks.
