@@ -2,7 +2,8 @@
 
 ## restdown 1.2.3 (not yet released)
 
-- Fix print styling of pre.shell blocks.
+- ["ohthejoy" brand] Fix print styling of pre.shell blocks.
+- ["ohthejoy" brand] Reasonable default table styles.
 
 
 ## restdown 1.2.2

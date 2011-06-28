@@ -35,7 +35,6 @@ $(function() {
                     heading.replace(/ /g, '-'),
                     heading.replace(/ /g, '-').toLowerCase()
                 ]
-                console.log("XXX possibleAnchors: "+possibleAnchors)
                 for (var i=0; i < possibleAnchors.length; i++) {
                     $("#sidebar a[href|=#" + possibleAnchors[i] + "]").parent().addClass("current");
                 }
