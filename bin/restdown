@@ -150,16 +150,13 @@ def restdown(metadata, markdown, brand_dir=None):
     html = Restdowner(**markdown_opts).convert(markdown)
     metadata["toc_html"] = html.toc_html
 
-    #print html.toc_html
-    #pprint(html._toc)
-
     if brand_dir is None:
         brand_dir = _get_brand_dir(metadata.get("brand"))
     header_in = codecs.open(join(brand_dir, "header.html.in"), 'r', 'utf-8').read()
     header = header_in % metadata
     footer_in = codecs.open(join(brand_dir, "footer.html.in"), 'r', 'utf-8').read()
     footer = footer_in % metadata
-    
+
     bits = [header]
     bits.append(u"""
     <div id="sidebar">
@@ -170,12 +167,25 @@ def restdown(metadata, markdown, brand_dir=None):
     bits.append(html)
     bits.append(u"\n    </div>\n")
     bits.append(footer)
-    
+
     endpoints = [name.split('-', 1)
         for n, name, html in html._toc if n == 2]
-    data = {
-        "endpoints": ["%-6s %s" % tuple(e) for e in endpoints],
-    }
+
+    consistent_fmt = True
+    for e in endpoints:
+        if (len(e) != 2):
+            consistent_fmt = False
+            break
+
+    if consistent_fmt:
+        data = {
+            "endpoints": ["%-6s %s" % tuple(e) for e in endpoints],
+            }
+    else:
+        data = {
+            "endpoints": ["%s" % ' '.join(e) for e in endpoints],
+            }
+
     if "version" in metadata:
         data["version"] = metadata["version"]
     return u''.join(bits), data
@@ -186,7 +196,7 @@ def restdown(metadata, markdown, brand_dir=None):
 
 def _copy_dir(src, dst):
     """Copy `src` dir to `dst` dir, updating already existing files.
-    
+
     Note: This does NOT delete files in dst that don't exist in src.
     """
     for dirpath, dirnames, filenames in os.walk(src):
@@ -268,7 +278,7 @@ def main(argv=sys.argv):
         brand_dir=None)
     opts, paths = parser.parse_args()
     log.setLevel(opts.log_level)
-    
+
     for path in paths:
         restdown_path(path, brand_dir=opts.brand_dir,
             copy_brand_media_to=opts.copy_brand_media_to)
