@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.3 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.2
 
 - New default "ohthejoy" brand. Improvements: 
