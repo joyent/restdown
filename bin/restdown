@@ -62,12 +62,14 @@ class RestdownError(StandardError):
 
 class Restdowner(markdown2.Markdown):
     # Use this Markdown hook to:
-    # - exclude first h1 from the TOC
+    # - exclude first h1 section from the TOC
     # - do custom translation of h2 text to id (h2's are the API endpoints)
-    _skipped_first_h1 = False
+    _h1_stack = []
     def header_id_from_text(self, text, prefix, n):
-        if n == 1 and not self._skipped_first_h1:
-            self._skipped_first_h1 = True
+        if n == 1:
+            self._h1_stack.append(text)
+        if len(self._h1_stack) == 1:
+            pass
         elif n == 1:
             return super(Restdowner, self).header_id_from_text(text, prefix, n)
         elif n == 2:

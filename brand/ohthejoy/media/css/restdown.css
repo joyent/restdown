@@ -187,7 +187,7 @@ pre.shell code::before {
 }
 
 #sidebar ul {
-  margin:3px 0 10px 0;
+  margin:3px 0 10px 10px;
 }
 
 #sidebar li {
@@ -203,9 +203,6 @@ pre.shell code::before {
 #sidebar li {
   list-style:none;
   padding:1px 0px 1px 0px;
-}
-#sidebar ul ul {
-  padding-left: 10px;
 }
 
 #sidebar li span.verb {
