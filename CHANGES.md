@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.4 (not yet released)
+## restdown 1.2.4
 
 - Fix TOC handling to skip h2's in the intro section.
 
