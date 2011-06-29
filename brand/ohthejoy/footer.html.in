@@ -4,8 +4,9 @@ $(function() {
 
     var sections = $("#content h1[id], #content h2[id]");
     var sectionOffsets = [];
+    var slack = 100;  // Give the section scroll some slack (in pixels).
     sections.each(function(elem) {
-        sectionOffsets.push($(this).offset().top - headerHeight);
+        sectionOffsets.push($(this).offset().top - headerHeight - slack);
     });
 
     var currSectionIdx = -1;

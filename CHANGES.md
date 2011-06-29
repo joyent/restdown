@@ -2,7 +2,8 @@
 
 ## restdown 1.2.5 (not yet released)
 
-(nothing yet)
+- ["ohthejoy" brand] Give the TOC arrow header some scrolling slack.
+
 
 ## restdown 1.2.4
 
