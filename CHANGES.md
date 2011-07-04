@@ -2,6 +2,7 @@
 
 ## restdown 1.2.5 (not yet released)
 
+- ["ohthejoy" brand] Don't let TOC labels wrap (helpful for longer TOC titles)
 - ["ohthejoy" brand] Give the TOC arrow header some scrolling slack.
 
 
