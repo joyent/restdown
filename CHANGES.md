@@ -2,7 +2,8 @@
 
 ## restdown 1.2.6 (not yet released)
 
-(nothing yet)
+- Add support for 'mediaroot' document metadatum to control the URL from which brand media is pulled.
+
 
 ## restdown 1.2.5
 

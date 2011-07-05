@@ -119,6 +119,8 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
         title = ' '.join(s.capitalize()
             for s in splitext(basename(path))[0].split('-'))
         metadata["title"] = title
+    if "mediaroot" not in metadata:
+        metadata["mediaroot"] = "media"
     html, data = restdown(metadata, markdown, brand_dir)
 
     base, ext = splitext(basename(path))

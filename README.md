@@ -59,6 +59,25 @@ tweaks). Start by copying one of the brands in the restdown/brands directory
 and then use the "-b|--brand" option to restdown.
 
 
+# Document Metadata
+
+A restdown document should start with a metadata block like this:
+
+    ---
+    key: value
+    ---
+
+At the least, you should provide the "title". Supported metadata keys
+depend on the brand (the metadata is interpolated into the 'header.html.in'
+and 'footer.html.in' files), but typical keys are:
+
+- *title*: The text for the HTML `<title>`.
+- *mediaroot*: The base URL from which to load the brand media (images, css).
+  If not provided, the default is "media" (i.e. a relative path).
+
+
+
+
 # api.json
 
 The generated "api.json" file currently looks like this:
