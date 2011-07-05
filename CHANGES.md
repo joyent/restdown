@@ -2,6 +2,8 @@
 
 ## restdown 1.2.5 (not yet released)
 
+- ["ohthejoy" brand] Switch to background gradient for current TOC item instead
+  of arrow: easier to see than the arrow for larger APIs.
 - ["ohthejoy" brand] Don't let TOC labels wrap (helpful for longer TOC titles)
 - ["ohthejoy" brand] Give the TOC arrow header some scrolling slack.
 
