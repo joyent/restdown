@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.6 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.5
 
 - ["ohthejoy" brand] Switch to background gradient for current TOC item instead
