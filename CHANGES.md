@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.5 (not yet released)
+## restdown 1.2.5
 
 - ["ohthejoy" brand] Switch to background gradient for current TOC item instead
   of arrow: easier to see than the arrow for larger APIs.
