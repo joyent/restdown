@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.7 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.6
 
 - [issue #2, "ohthejoy" brand] Add support for method h2's being in other of
