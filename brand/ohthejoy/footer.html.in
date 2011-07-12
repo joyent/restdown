@@ -23,17 +23,28 @@ $(function() {
         }
     }
 
+    /** {{{ http://code.activestate.com/recipes/577787/ (r2) */
+    _slugify_strip_re = /[^\w\s-]/g;
+    _slugify_hyphenate_re = /[-\s]+/g;
+    function slugify(s) {
+      s = s.replace(_slugify_strip_re, '').trim().toLowerCase();
+      s = s.replace(_slugify_hyphenate_re, '-');
+      return s;
+    }
+    /** end of http://code.activestate.com/recipes/577787/ }}} */
+
+
     $("#content").scroll(function() {
         var scrollDistance = $("#content").attr('scrollTop');
         var sectionIdx = getSectionIdx(scrollDistance);
     
         if (sectionIdx !== currSectionIdx) {
-            $("#sidebar li").removeClass("current");
+            $("#sidebar li>div").removeClass("current");
             currSectionIdx = sectionIdx;
             if (currSectionIdx >= 0) {
                 var heading = $(sections[currSectionIdx]).text();
                 var possibleAnchors = [
-                    heading.replace(/ /g, '-').toLowerCase(), // h1 or non-method h2
+                    slugify(heading), // h1 or non-method h2
                     heading.replace(/ /g, '-'), // h2 method, just name or just endpoint
                     heading.slice(0, heading.lastIndexOf(' (')).trimRight().replace(/ /g, '-'), // h2 method, name and endpoint
                 ]

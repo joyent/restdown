@@ -235,7 +235,10 @@ def restdown(metadata, markdown, brand_dir=None):
     restdowner = Restdowner(api_sections=metadata.get("apisections"),
         **markdown_opts)
     html = restdowner.convert(markdown)
-    metadata["toc_html"] = html.toc_html
+    # Add a wrapper <div> around the links in TOC elements. This allows
+    # full width styling of 'li' lines, even if they contain children.
+    metadata["toc_html"] = re.sub(r'(<a href=".*?">.*?</a>)', r'<div>\1</div>',
+        html.toc_html)
 
     if brand_dir is None:
         brand_dir = _get_brand_dir(metadata.get("brand"))
