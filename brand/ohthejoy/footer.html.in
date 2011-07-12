@@ -33,8 +33,9 @@ $(function() {
             if (currSectionIdx >= 0) {
                 var heading = $(sections[currSectionIdx]).text();
                 var possibleAnchors = [
-                    heading.replace(/ /g, '-'),
-                    heading.replace(/ /g, '-').toLowerCase()
+                    heading.replace(/ /g, '-').toLowerCase(), // h1 or non-method h2
+                    heading.replace(/ /g, '-'), // h2 method, just name or just endpoint
+                    heading.slice(0, heading.lastIndexOf(' (')).trimRight().replace(/ /g, '-'), // h2 method, name and endpoint
                 ]
                 for (var i=0; i < possibleAnchors.length; i++) {
                     $("#sidebar a[href|=#" + possibleAnchors[i] + "]").parent().addClass("current");
