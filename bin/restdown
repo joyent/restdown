@@ -147,7 +147,6 @@ class Restdowner(Markdown):
         r'''^(<h2.*?>)(.*?)(</h2>)$''', re.M)
     def _method_header_sub(self, match):
         inside = match.group(2)
-        print "XXX h2 inside: %r" % inside
         if inside in self.methods:
             for regex, sub in self._method_subs:
                 m = regex.match(inside)
