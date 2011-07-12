@@ -2,7 +2,8 @@
 
 ## restdown 1.2.7 (not yet released)
 
-(nothing yet)
+- Fix a bug handling an empty "apisections" metadatum.
+
 
 ## restdown 1.2.6
 

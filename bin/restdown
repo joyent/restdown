@@ -194,7 +194,10 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
         if key in metadata:
             f = StringIO(metadata[key])
             reader = csv.reader(f)
-            row = [cell.strip() for cell in reader.next()]
+            try:
+                row = [cell.strip() for cell in reader.next()]
+            except StopIteration:
+                row = []
             metadata[key] = row
     html, data = restdown(metadata, markdown, brand_dir)
 
