@@ -29,11 +29,13 @@ from pprint import pprint
 import logging
 import json
 import optparse
+from StringIO import StringIO
+import csv
 
 _saved_path = sys.path[:]
 sys.path.insert(0, join(dirname(dirname(abspath(__file__))), "externals", "lib")) # dev layout
 sys.path.insert(0, join(dirname(__file__))) # allow markdown2.py in same dir
-import markdown2
+from markdown2 import Markdown
 sys.path = _saved_path
 del _saved_path
 
@@ -60,7 +62,19 @@ class RestdownError(StandardError):
 
 #---- restdown processor
 
-class Restdowner(markdown2.Markdown):
+class Restdowner(Markdown):
+    """Markdown subclass that tweaks API TOC entries for some REST API
+    TOC love.
+    
+    @param api_sections {list} A list of h1 section names that are API
+        sections, as opposed to prose introductory or explanatory sections.
+        If not given, or None, then all sections except the first (presumed
+        to be a preface section) are assumed to be API sections.
+    """
+    def __init__(self, api_sections=None, **kwargs):
+        self.api_sections = api_sections
+        Markdown.__init__(self, **kwargs)
+    
     # Use this Markdown hook to:
     # - exclude first h1 section from the TOC
     # - do custom translation of h2 text to id (h2's are the API endpoints)
@@ -68,13 +82,33 @@ class Restdowner(markdown2.Markdown):
     def header_id_from_text(self, text, prefix, n):
         if n == 1:
             self._h1_stack.append(text)
-        if len(self._h1_stack) == 1:
-            pass
-        elif n == 1:
-            return super(Restdowner, self).header_id_from_text(text, prefix, n)
-        elif n == 2:
-            # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
-            return text.replace(' ', '-')
+        if self.api_sections is None:
+            if len(self._h1_stack) == 1:
+                pass
+            elif n == 1:
+                return super(Restdowner, self).header_id_from_text(text, prefix, n)
+            elif n == 2:
+                # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
+                return text.replace(' ', '-')
+        else:
+            if len(self._h1_stack) == 1 and self._h1_stack[-1] not in self.api_sections:
+                # Still presume the first section to be a preface section
+                # and exclude from TOC, unless explicitly in `api_sections`.
+                pass
+            elif n == 2 and self._h1_stack[-1] in self.api_sections:
+                # API endpoint.
+                # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
+                return text.replace(' ', '-')
+            elif n in (1,2):
+                return super(Restdowner, self).header_id_from_text(text, prefix, n)
+
+    # Add some markup to endpoint entries in the TOC html for styling.
+    _endpoint_re = re.compile(r'^([A-Z]+)(\s+)(.*?)$')
+    def _toc_add_entry(self, level, id, name):
+        if level == 2:
+            name = self._endpoint_re.sub(
+                r'<span class="verb">\1</span>\2<span>\3</span>', name)
+        super(Restdowner, self)._toc_add_entry(level, id, name)
 
     _endpoint_header_re = re.compile(
         r'''^(<h2.*?>)([A-Z]+\s+.*?)(</h2>)$''', re.M)
@@ -95,14 +129,6 @@ class Restdowner(markdown2.Markdown):
 
         return text
 
-    # Add some markup to endpoint entries in the TOC html for styling.
-    _endpoint_re = re.compile(r'^([A-Z]+)(\s+)(.*?)$')
-    def _toc_add_entry(self, level, id, name):
-        if level == 2:
-            name = self._endpoint_re.sub(
-                r'<span class="verb">\1</span>\2<span>\3</span>', name)
-        super(Restdowner, self)._toc_add_entry(level, id, name)
-
 def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
     markdown = codecs.open(path, 'r', 'utf-8').read()
     metadata = {}
@@ -121,6 +147,13 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
         metadata["title"] = title
     if "mediaroot" not in metadata:
         metadata["mediaroot"] = "media"
+    for key in ["apisections"]:
+        # Expand "list"-type config vars. They are csv.
+        if key in metadata:
+            f = StringIO(metadata[key])
+            reader = csv.reader(f)
+            row = [cell.strip() for cell in reader.next()]
+            metadata[key] = row
     html, data = restdown(metadata, markdown, brand_dir)
 
     base, ext = splitext(basename(path))
@@ -154,7 +187,9 @@ def restdown(metadata, markdown, brand_dir=None):
     @returns {str, dict} The HTML document (full page) and a dict giving
         data about the API: version, endpoints.
     """
-    html = Restdowner(**markdown_opts).convert(markdown)
+    restdowner = Restdowner(api_sections=metadata.get("apisections"),
+        **markdown_opts)
+    html = restdowner.convert(markdown)
     metadata["toc_html"] = html.toc_html
 
     if brand_dir is None:
@@ -175,8 +210,17 @@ def restdown(metadata, markdown, brand_dir=None):
     bits.append(u"\n    </div>\n")
     bits.append(footer)
 
-    endpoints = [name.split('-', 1)
-        for n, name, html in html._toc if n == 2]
+    last_h1 = None
+    endpoints = []
+    api_sections = metadata.get("apisections")
+    for n, name, html in html._toc:
+        if n == 1:
+            last_h1 = html
+        # WARNING: This is comparing text to HTML, so will break if any
+        # markup in the h1!
+        elif n == 2 and (api_sections is None
+                         or last_h1 in api_sections):
+            endpoints.append(name.split('-', 1))
 
     consistent_fmt = True
     for e in endpoints:
@@ -185,13 +229,9 @@ def restdown(metadata, markdown, brand_dir=None):
             break
 
     if consistent_fmt:
-        data = {
-            "endpoints": ["%-6s %s" % tuple(e) for e in endpoints],
-            }
+        data = {"endpoints": ["%-6s %s" % tuple(e) for e in endpoints]}
     else:
-        data = {
-            "endpoints": ["%s" % ' '.join(e) for e in endpoints],
-            }
+        data = {"endpoints": ["%s" % ' '.join(e) for e in endpoints]}
 
     if "version" in metadata:
         data["version"] = metadata["version"]

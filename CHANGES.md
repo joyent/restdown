@@ -2,7 +2,14 @@
 
 ## restdown 1.2.6 (not yet released)
 
-- Add support for 'mediaroot' document metadatum to control the URL from which brand media is pulled.
+- Add 'apisections' document metadatum. It is a comma-separated list of h1 section
+  names that are to be considered the API endpoint sections (i.e. an h1 section
+  in which h1's define REST API endpoints). If 'apisections' is not specified
+  it is presumed that all sections except the first (presumed to be a preface
+  section) are API sections. This is related to issue #2, but not a complete
+  fix yet.
+- Add support for 'mediaroot' document metadatum to control the URL from which
+  brand media is pulled.
 
 
 ## restdown 1.2.5
