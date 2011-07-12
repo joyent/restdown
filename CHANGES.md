@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.8 (not yet released)
+## restdown 1.2.8
 
 - ["ohthejoy" brand] Fix issue with "current section" highlighting in the TOC:
   for the h1's the whole section would be highlighted instead of just the h1
