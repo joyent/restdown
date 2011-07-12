@@ -2,7 +2,8 @@
 
 ## restdown 1.2.6 (not yet released)
 
-- Add support for method h2's being in other of the following formats:
+- [issue #2, "ohthejoy" brand] Add support for method h2's being in other of
+  the following formats:
 
     1. "NAME (VERB PATH)", e.g. "ListMachines (GET /:login/machines)".
        Only NAME is shown in table of contents and used for the section anchor.
@@ -10,6 +11,8 @@
        summary file.
     2. "VERB PATH", e.g. "DELETE /zones/:uuid"
     3. "NAME", e.g. "DoIt"
+
+  Note: It is possible the markup changes here break other brands.
 
 - Add 'apisections' document metadatum. It is a comma-separated list of h1 section
   names that are to be considered the API endpoint sections (i.e. an h1 section
