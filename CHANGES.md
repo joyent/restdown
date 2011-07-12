@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.7 (not yet released)
+## restdown 1.2.7
 
 - Fix a bug handling an empty "apisections" metadatum.
 
