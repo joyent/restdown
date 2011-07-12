@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.9 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.8
 
 - ["ohthejoy" brand] Fix issue with "current section" highlighting in the TOC:
