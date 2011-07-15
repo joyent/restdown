@@ -23,7 +23,7 @@ import sys
 import os
 import codecs
 import shutil
-from os.path import expanduser, basename, splitext, dirname, join, abspath, isdir, exists
+from os.path import expanduser, basename, splitext, dirname, join, abspath, isdir, exists, realpath
 from glob import glob
 from pprint import pprint
 import logging
@@ -33,8 +33,8 @@ from StringIO import StringIO
 import csv
 
 _saved_path = sys.path[:]
-sys.path.insert(0, join(dirname(dirname(abspath(__file__))), "externals", "lib")) # dev layout
-sys.path.insert(0, join(dirname(__file__))) # allow markdown2.py in same dir
+sys.path.insert(0, join(dirname(dirname(abspath(realpath(__file__)))), "externals", "lib")) # dev layout
+sys.path.insert(0, join(dirname(realpath(__file__)))) # allow markdown2.py in same dir
 from markdown2 import Markdown
 sys.path = _saved_path
 del _saved_path
@@ -316,7 +316,7 @@ def _md5path(path):
 def _get_brand_dir(brand=None):
     if brand is None:
         brand = DEFAULT_BRAND
-    return join(dirname(dirname(abspath(__file__))), "brand", brand)
+    return join(dirname(dirname(abspath(realpath(__file__)))), "brand", brand)
 
 class _LowerLevelNameFormatter(logging.Formatter):
     def format(self, record):

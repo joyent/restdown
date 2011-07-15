@@ -2,7 +2,7 @@
 
 ## restdown 1.2.11 (not yet released)
 
-(nothing yet)
+- Use `realpath` as appropriate so can run `restdown` as a symlink.
 
 ## restdown 1.2.10
 
