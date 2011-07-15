@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.10 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.9
 
 - Add "-d|--define" option for providing metadata on the command line.
