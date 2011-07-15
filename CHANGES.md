@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.10 (not yet released)
+## restdown 1.2.10
 
 - Fix bug in "-d|--define".
 
