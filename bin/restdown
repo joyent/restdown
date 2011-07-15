@@ -171,7 +171,7 @@ class Restdowner(Markdown):
 
         return text
 
-def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
+def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
     markdown = codecs.open(path, 'r', 'utf-8').read()
     metadata = {}
     if markdown.startswith("---"):
@@ -199,6 +199,8 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None):
             except StopIteration:
                 row = []
             metadata[key] = row
+    if defines:
+        metadata.update(defines)
     html, data = restdown(metadata, markdown, brand_dir)
 
     base, ext = splitext(basename(path))
@@ -621,14 +623,19 @@ def main(argv=sys.argv):
     parser.add_option("-b", "--brand-dir", metavar="DIR",
         help="brand dir to use for constructing HTML. Defaults to "
              "'brand/%s' in the restdown install." % DEFAULT_BRAND)
+    parser.add_option("-D", "--define", metavar="NAME=VALUE",
+        action="append", dest="defines",
+        help="define a metadatum to be used for processing")
     parser.set_defaults(log_level=logging.INFO, copy_brand_media_to=None,
         brand_dir=None)
     opts, paths = parser.parse_args()
     log.setLevel(opts.log_level)
 
+    defines = dict(d.split('=', 1) for d in opts.defines)
     for path in paths:
         restdown_path(path, brand_dir=opts.brand_dir,
-            copy_brand_media_to=opts.copy_brand_media_to)
+            copy_brand_media_to=opts.copy_brand_media_to,
+            defines=defines)
 
 ## {{{ http://code.activestate.com/recipes/577258/ (r4)
 if __name__ == "__main__":

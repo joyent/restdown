@@ -124,6 +124,9 @@ and 'footer.html.in' files), but typical keys are:
   
         apisections: Accounts, Data Centers, Widgets
 
+Metadata can also be provided on the command-line with the `-d|--define` option. For example:
+
+    restdown --define mediaroot=/ index.restdown
 
 
 # JSON API Summary
