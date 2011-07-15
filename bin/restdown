@@ -627,7 +627,7 @@ def main(argv=sys.argv):
         action="append", dest="defines",
         help="define a metadatum to be used for processing")
     parser.set_defaults(log_level=logging.INFO, copy_brand_media_to=None,
-        brand_dir=None)
+        brand_dir=None, defines=[])
     opts, paths = parser.parse_args()
     log.setLevel(opts.log_level)
 

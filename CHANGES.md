@@ -2,7 +2,7 @@
 
 ## restdown 1.2.10 (not yet released)
 
-(nothing yet)
+- Fix bug in "-d|--define".
 
 ## restdown 1.2.9
 
