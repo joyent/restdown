@@ -28,6 +28,7 @@ from glob import glob
 from pprint import pprint
 import logging
 import json
+import copy
 import optparse
 from StringIO import StringIO
 import csv
@@ -189,7 +190,7 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
         metadata["title"] = title
     if "mediaroot" not in metadata:
         metadata["mediaroot"] = "media"
-    for key in ["apisections"]:
+    for key in ["apisections", "markdown2extras"]:
         # Expand "list"-type config vars. They are csv.
         if key in metadata:
             f = StringIO(metadata[key])
@@ -234,8 +235,11 @@ def restdown(metadata, markdown, brand_dir=None):
     @returns {str, dict} The HTML document (full page) and a dict giving
         data about the API: version, endpoints.
     """
+    doc_markdown_opts = copy.deepcopy(markdown_opts)
+    for extra in metadata.get("markdown2extras", []):
+        doc_markdown_opts["extras"][extra] = True
     restdowner = Restdowner(api_sections=metadata.get("apisections"),
-        **markdown_opts)
+        **doc_markdown_opts)
     html = restdowner.convert(markdown)
     # Add a wrapper <div> around the links in TOC elements. This allows
     # full width styling of 'li' lines, even if they contain children.

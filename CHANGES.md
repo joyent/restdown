@@ -2,6 +2,10 @@
 
 ## restdown 1.2.11 (not yet released)
 
+- Add the "markdown2extras" metadata var to enable turning on markdown2
+  extra syntax for the processed document. See
+  <https://github.com/trentm/python-markdown2/wiki/Extras>.
+- Upgrade to python-markdown2 1.0.1.19.
 - Use `realpath` as appropriate so can run `restdown` as a symlink.
 
 ## restdown 1.2.10

@@ -124,6 +124,14 @@ and 'footer.html.in' files), but typical keys are:
   
         apisections: Accounts, Data Centers, Widgets
 
+- **markdown2extras**: A list of "extras" to be used for processing the
+  markdown in the document. Valid values are
+  [the Extra supported by python-markdown2](https://github.com/trentm/python-markdown2/wiki/Extras)
+  (the Markdown processor used by restdown). Note that the "toc",
+  "header-ids" and "markdown-in-html" extras are always turned on. E.g.:
+  
+        markdown2extras: wiki-tables, cuddled-lists
+
 Metadata can also be provided on the command-line with the `-d|--define` option. For example:
 
     restdown --define mediaroot=/ index.restdown
