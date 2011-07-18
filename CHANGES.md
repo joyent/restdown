@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.11 (not yet released)
+## restdown 1.2.11
 
 - Add the "markdown2extras" metadata var to enable turning on markdown2
   extra syntax for the processed document. See
