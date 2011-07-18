@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.12 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.11
 
 - Add the "markdown2extras" metadata var to enable turning on markdown2
