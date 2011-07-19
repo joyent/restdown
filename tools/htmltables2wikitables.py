@@ -30,7 +30,7 @@ tr_regex = re.compile(r"""
 (.*?)
 \s*</tr>
 """, re.S | re.M | re.X)
-td_regex = re.compile(r"""<td>([^<]+?)</td>""")
+td_regex = re.compile(r"""<td>([^<]*?)</td>""")
 
 
 def htmltables2wikitables(path):
@@ -52,7 +52,7 @@ def htmltables2wikitables(path):
                 # Normalize whitespace to a single line.
                 cell = re.sub(r'\s*\n\s*', u' ', td.group(1)).strip()
                 row.append(cell)
-            rows.append(u"||%s||" % u"||".join(row))
+            rows.append(u"|| %s ||" % u" || ".join(row))
             if VERBOSE:
                 print rows[-1]
         start, end = table.span()
