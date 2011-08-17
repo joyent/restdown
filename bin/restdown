@@ -254,12 +254,15 @@ def restdown(metadata, markdown, brand_dir=None):
     footer = footer_in % metadata
 
     bits = [header]
-    bits.append(u"""
+    toc_html_marker = "%(toc_html)s"
+    if toc_html_marker not in header_in and toc_html_marker not in footer_in:
+        bits.append
+        bits.append(u"""
     <div id="sidebar">
 %(toc_html)s
     </div>
-    <div id="content">
 """ % metadata)
+    bits.append('    <div id="content">\n')
     bits.append(html)
     bits.append(u"\n    </div>\n")
     bits.append(footer)

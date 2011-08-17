@@ -2,7 +2,12 @@
 
 ## restdown 1.2.12 (not yet released)
 
-(nothing yet)
+- New "spartan" brand.
+- If `%(toc_html)s` appears in the "header.html.in" or "footer.html.in" files,
+  then the `<div id="sidebar">%(toc_html)s</div>` is excluded. This allows
+  one to customize where the TOC html appears.
+  Note: an metadata option should be added to more explicitly control this.
+
 
 ## restdown 1.2.11
 
