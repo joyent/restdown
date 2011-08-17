@@ -70,42 +70,37 @@ h1,h2,h3,h4,h5,h6 {
   text-rendering: optimizeLegibility;
 }
 h1 {
-  font-size: 36px;
-  line-height: 48px;
-  padding: 48px 0 24px 0;
-}
-h2 {
   font-size: 28px;
   line-height: 48px;
   padding: 24px 0 0 0;
 }
-h3 {
+h2 {
   font-size: 21px;
   line-height: 24px;
   padding: 24px 0 24px 0;
 }
-h4 {
+h3 {
   font-size: 16px;
   line-height: 24px;
   padding: 24px 0 0 0;
 }
+h4 {
+  font-size: 14px;
+  line-height: 24px;
+  padding: 24px 0 0 0;
+}
 h5 {
+  color: #666;
   font-size: 14px;
   line-height: 24px;
   padding: 24px 0 0 0;
 }
 h6 {
   color: #666;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 24px;
-  padding: 24px 0 0 0;
+  padding: 0;
 }
-/*h6 {*/
-/*  color: #666;*/
-/*  font-size: 12px;*/
-/*  line-height: 24px;*/
-/*  padding: 0;*/
-/*}*/
 hr {
   padding-bottom: 24px;
   margin: 24px 0;
