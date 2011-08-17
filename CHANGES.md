@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.12 (not yet released)
+## restdown 1.2.12
 
 - New "spartan" brand.
 - If `%(toc_html)s` appears in the "header.html.in" or "footer.html.in" files,
