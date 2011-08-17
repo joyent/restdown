@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.13 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.12
 
 - New "spartan" brand.
