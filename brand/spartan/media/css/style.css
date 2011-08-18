@@ -303,11 +303,11 @@ ul ul ul { list-style-type: circle; }
   text-decoration: underline;
 }
 #toc ul {
+  margin: 0;
   padding: 0px;
   list-style-type: none;
 }
-
-#content {
-  clear: both;
+#toc ul ul {
+  margin-left: 24px;
 }
 
