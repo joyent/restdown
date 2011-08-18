@@ -2,7 +2,8 @@
 
 ## restdown 1.2.13 (not yet released)
 
-(nothing yet)
+- "spartan" brand: blue default logo color, instead of pink
+
 
 ## restdown 1.2.12
 
