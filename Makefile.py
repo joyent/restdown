@@ -16,8 +16,10 @@ from mklib import sh
 class examples(Task):
     """render examples/*.restdown"""
     def make(self):
-        for path in glob(join(self.dir, "examples", "*", "*.restdown")):
-            os.system("bin/restdown %s" % path)
+        pats = ["*.restdown", "*.md", "*.rd"]
+        for pat in pats:
+            for path in glob(join(self.dir, "examples", "*", pat)):
+                os.system("bin/restdown -D mediaroot=media %s" % path)
 
 class cut_a_release(Task):
     """automate the steps for cutting a release"""
