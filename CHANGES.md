@@ -2,7 +2,8 @@
 
 ## restdown 1.2.14 (not yet released)
 
-(nothing yet)
+- [issue #3] "ohthejoy" brand: Bullets in lists should hang.
+
 
 ## restdown 1.2.13
 
