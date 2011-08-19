@@ -2,10 +2,13 @@
 
 ## restdown 1.2.13 (not yet released)
 
-- "spartan" brand: Blue default logo color, instead of pink.
-  TOC margin fix for narrow screens.
-  Support for "logo-color", "logo-font-family" and "header-font-family"
-  metadata (see README.md for description).
+- [issue #6] "spartan" brand: 
+    - Blue default logo color, instead of pink.
+    - TOC margin fix for narrow screens.
+    - Support for "logo-color", "logo-font-family" and "header-font-family"
+      metadata (see README.md for description).
+    - Slightly wider (650px -> 700px).
+    - Restore "pre.shell" styling from "ohthejoy" brand.
 
 
 ## restdown 1.2.12

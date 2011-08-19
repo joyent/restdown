@@ -135,7 +135,7 @@ body {
 }
 #wrapper {
   margin: 0 auto;
-  max-width: 650px;
+  max-width: 700px;
   position: relative;
 }
 #main {
@@ -258,9 +258,25 @@ ul ul ul { list-style-type: circle; }
 }
 
 
+/* ---- custom classes */
+
+pre.shell,
+pre.shell code {
+  background:#444;
+  color:#fff;
+  border-width:0px;
+}
+pre.shell code::before {
+  content: '$ ';
+  display: inline;
+}
+
 
 /* ----- top header */
 
+#header {
+  margin: 48px 0 24px 0;
+}
 #logo {
   font-family: Georgia,serif;
   font-weight: bold;
