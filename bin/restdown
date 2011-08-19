@@ -32,6 +32,7 @@ import copy
 import optparse
 from StringIO import StringIO
 import csv
+from urllib import quote_plus as urlquote
 
 _saved_path = sys.path[:]
 sys.path.insert(0, join(dirname(dirname(abspath(realpath(__file__)))), "externals", "lib")) # dev layout
@@ -245,6 +246,46 @@ def restdown(metadata, markdown, brand_dir=None):
     # full width styling of 'li' lines, even if they contain children.
     metadata["toc_html"] = re.sub(r'(<a href=".*?">.*?</a>)', r'<div>\1</div>',
         html.toc_html)
+
+    # Custom css for the document based on metadata.
+    doc_css = ""
+    if "logo-color" in metadata:
+        doc_css += """
+#logo {
+  color: %s;
+}
+""" % metadata["logo-color"]
+    google_fonts = []
+    if "logo-font-family" in metadata:
+        # Comma-separate list.
+        names = re.split(r'\s*,\s*', metadata["logo-font-family"].strip())
+        for i, name in enumerate(names):
+            if name.startswith("google:"):
+                names[i] = name = name[7:]
+                google_fonts.append(name)
+        doc_css += """
+#logo {
+  font-family: %s;
+}
+""" % ', '.join(names)
+    if "header-font-family" in metadata:
+        # Comma-separate list.
+        names = re.split(r'\s*,\s*', metadata["header-font-family"].strip())
+        for i, name in enumerate(names):
+            if name.startswith("google:"):
+                names[i] = name = name[7:]
+                google_fonts.append(name)
+        doc_css += """
+h1,h2,h3,h4,h5,h6 {
+  font-family: %s;
+}
+""" % ', '.join(names)
+    doc_style = ""
+    if doc_css:
+        for name in google_fonts:
+            doc_style += '<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=%s">\n' % urlquote(name)
+        doc_style += "<style>\n%s\n</style>\n" % doc_css
+    metadata["doc_style"] = doc_style
 
     if brand_dir is None:
         brand_dir = _get_brand_dir(metadata.get("brand"))

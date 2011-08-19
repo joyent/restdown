@@ -132,6 +132,19 @@ and 'footer.html.in' files), but typical keys are:
   
         markdown2extras: wiki-tables, cuddled-lists
 
+- **logo-color** (brands: spartan): A CSS color string (e.g. '#ff5533',
+  'blue') to be used for the `#logo` element.
+
+- **logo-font-family** (brands: spartan): A CSS `font-family` list of font
+  faces for the `#logo` element. This also supports a font from
+  [Google Web Fonts](http://www.google.com/webfonts) with a "google:"
+  prefix. E.g.:
+  
+        logo-font-family: google:Aldrich, Verdana, sans-serif
+
+- **header-font-family** (brands: spartan): A CSS `font-family` list of font
+  faces for the `h1` - `h6` elements. Supports "google:" prefix as above.
+
 Metadata can also be provided on the command-line with the `-d|--define` option. For example:
 
     restdown --define mediaroot=/ index.restdown
