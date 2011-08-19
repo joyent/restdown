@@ -1,5 +1,9 @@
 # restdown Changelog
 
+## restdown 1.2.15 (not yet released)
+
+(nothing yet)
+
 ## restdown 1.2.14
 
 - [issue #4] "ohthejoy" brand: Text in tables should align to the top of the cells.
