@@ -1,6 +1,7 @@
 ---
 title: Dataset API (DSAPI)
-mediaroot: /docs/media
+mediaroot: media
+markdown2extras: wiki-tables
 ---
 
 # Dataset API
@@ -157,10 +158,12 @@ for backward compatibility). Will be removed in 2011Q3.
 
 Use [GET /dataset/:id/:path](#GET-/datasets/:id/:path) instead.
 
-Responds with **403 Forbidden** if access to the dataset is restricted.
-Responds with **404 Not Found** if the path isn't a part of any datasets.
-Responds with **400 Bad Request** if the path is ambiguous (two datasets
-with the same path).
+|| **Response Code** || **Description** ||
+|| **403_Forbidden** || if access to the dataset is restricted. ||
+|| **404_Not_Found** || if the path isn't a part of any datasets. ||
+|| **400_Bad_Request** || if the path is ambiguous (two datasets with the same path). Let's add some really long text here because want to see alignment in table for a cell that spans two lines. ||
+
+
 
 #### example request
 

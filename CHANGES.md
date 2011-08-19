@@ -2,6 +2,8 @@
 
 ## restdown 1.2.14 (not yet released)
 
+- [issue #4] "ohthejoy" brand: Text in tables should align to the top of the cells.
+  Also some table top/bottom margins.
 - [issue #3] "ohthejoy" brand: Bullets in lists should hang.
 
 

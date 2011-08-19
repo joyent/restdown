@@ -190,10 +190,14 @@ for backward compatibility). Will be removed in 2011Q3.</p>
 
 <p>Use <a href="#GET-/datasets/:id/:path">GET /dataset/:id/:path</a> instead.</p>
 
-<p>Responds with <strong>403 Forbidden</strong> if access to the dataset is restricted.
-Responds with <strong>404 Not Found</strong> if the path isn't a part of any datasets.
-Responds with <strong>400 Bad Request</strong> if the path is ambiguous (two datasets
-with the same path).</p>
+<table>
+<tbody>
+<tr><td><strong>Response Code</strong></td><td><strong>Description</strong></td></tr>
+<tr><td><strong>403_Forbidden</strong></td><td>if access to the dataset is restricted.</td></tr>
+<tr><td><strong>404<em>Not</em>Found</strong></td><td>if the path isn't a part of any datasets.</td></tr>
+<tr><td><strong>400<em>Bad</em>Request</strong></td><td>if the path is ambiguous (two datasets with the same path). Let's add some really long text here because want to see alignment in table for a cell that spans two lines.</td></tr>
+</tbody>
+</table>
 
 <h4>example request</h4>
 
