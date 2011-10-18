@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.15 (not yet released)
+## restdown 1.2.15
 
 - "spartan" branch: Fix path to jquery if using a "mediaroot" config value
   other than the defualt "/media".
