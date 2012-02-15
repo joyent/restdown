@@ -2,34 +2,35 @@
 
 1. Write a Markdown file that describes your REST API -- with some light
    conventions (see "Conventions" below) to structure to your doc file. E.g.:
-   
+
         $ cat api.restdown    # or api.md or index.markdown whatever
         ---
         title: My Awesome REST API
         ---
-        
+
         # My Awesome REST API
-        
+
         Some introduction...
-        
+
         # Wuzzers
-        
+
         ## GET /wuzzers
-        
+
         ...
 
         ## POST /wuzzers
-        
+
         ...
 
 2. Run it through `restdown` and out pops (a) "api.html", fairly light semantic
    HTML5 for your API; and (b) "api.json", a JSON representation of your API.
-   
+
         $ restdown -m STATICDIR api.restdown
 
    where "STATICDIR" is a path to your static content served dir.
 
-You should now have pretty decent looking REST API docs.
+You should now have pretty decent looking REST API docs. Read on for
+details.
 
 
 # Installation
@@ -55,6 +56,7 @@ Expected conventions to follow in your restdown document to get nice REST
 API docs.
 
 - The first `h1` is the API title, and its body is a preface to the API.
+  This first section is exluded from the table of contents (TOC).
 
 - Subsequent `h1`'s are API section titles. (If your whole API is one logical
   grouping then you might need that second `h1` anyway. Please [log an
@@ -63,18 +65,18 @@ API docs.
 
 - `h2`'s are API methods. The text of the h2 should be one of the following
   forms:
-  
+
         1. "NAME (VERB PATH)" if you name your api methods other than just
            with the HTTP verb and path. E.g. "ListMachines (GET /:login/machines)".
 
         2. "VERB PATH", E.g. "DELETE /widgets/:uuid"
-        
+
         3. "NAME", E.g. "flickr.photos.recentlyUpdated".
 
   Note that while the more structured names aren't required, they will help
   get good docs (including: HTML anchors, table of contents entries,
   JSON API summary content, etc.).
-  
+
 - `h3`'s are just normal subsection headers within endpoints, if needed for
   longer documentation for a particular endpoint.
 
@@ -121,7 +123,7 @@ and 'footer.html.in' files), but typical keys are:
   this isn't the case for you (perhaps you have some expository sections),
   then you can explicitly list the sections that include API methods. This
   is a comma-separated list of h1 section titles. E.g.:
-  
+
         apisections: Accounts, Data Centers, Widgets
 
 - **markdown2extras**: A list of "extras" to be used for processing the
@@ -129,7 +131,7 @@ and 'footer.html.in' files), but typical keys are:
   [the Extra supported by python-markdown2](https://github.com/trentm/python-markdown2/wiki/Extras)
   (the Markdown processor used by restdown). Note that the "toc",
   "header-ids" and "markdown-in-html" extras are always turned on. E.g.:
-  
+
         markdown2extras: wiki-tables, cuddled-lists
 
 - **logo-color** (brands: spartan): A CSS color string (e.g. '#ff5533',
@@ -139,7 +141,7 @@ and 'footer.html.in' files), but typical keys are:
   faces for the `#logo` element. This also supports a font from
   [Google Web Fonts](http://www.google.com/webfonts) with a "google:"
   prefix. E.g.:
-  
+
         logo-font-family: google:Aldrich, Verdana, sans-serif
 
 - **header-font-family** (brands: spartan): A CSS `font-family` list of font
@@ -157,8 +159,8 @@ API summary, that looks something like this:
 
     {
       "endpoints": [
-        "GET    /wuzzers", 
-        "POST   /wuzzers", 
+        "GET    /wuzzers",
+        "POST   /wuzzers",
         "DELETE /wuzzers",
         ...
       ]
@@ -182,5 +184,3 @@ you can wire this into your project:
         res.sendfile(__dirname + "/docs/api.json");
       }
     });
-
-
