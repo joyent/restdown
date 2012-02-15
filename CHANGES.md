@@ -2,6 +2,7 @@
 
 ## restdown 1.2.16 (not yet released)
 
+- Move to 'cutarelease.py' separate tool
 - [issue #9] Fix breakage if there are no TOC sections, i.e. no second h1 in
   the input restdown content.
 
