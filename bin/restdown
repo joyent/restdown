@@ -67,7 +67,7 @@ class RestdownError(StandardError):
 class Restdowner(Markdown):
     """Markdown subclass that tweaks API TOC entries for some REST API
     TOC love.
-    
+
     @param api_sections {list} A list of h1 section names that are API
         sections, as opposed to prose introductory or explanatory sections.
         If not given, or None, then all sections except the first (presumed
@@ -76,11 +76,11 @@ class Restdowner(Markdown):
     def __init__(self, api_sections=None, **kwargs):
         self.api_sections = api_sections
         Markdown.__init__(self, **kwargs)
-    
+
     def reset(self):
         super(Restdowner, self).reset()
         self.methods = OrderedDict()
-    
+
     # Use this Markdown hook to:
     # - exclude first h1 section from the TOC
     # - do custom translation of h2 text to id (h2's are the API endpoints)
@@ -144,7 +144,7 @@ class Restdowner(Markdown):
                     break
         super(Restdowner, self)._toc_add_entry(n, id, name)
 
-    
+
     _method_header_re = re.compile(
         r'''^(<h2.*?>)(.*?)(</h2>)$''', re.M)
     def _method_header_sub(self, match):
@@ -244,8 +244,11 @@ def restdown(metadata, markdown, brand_dir=None):
     html = restdowner.convert(markdown)
     # Add a wrapper <div> around the links in TOC elements. This allows
     # full width styling of 'li' lines, even if they contain children.
-    metadata["toc_html"] = re.sub(r'(<a href=".*?">.*?</a>)', r'<div>\1</div>',
-        html.toc_html)
+    if html.toc_html:
+        metadata["toc_html"] = re.sub(r'(<a href=".*?">.*?</a>)',
+            r'<div>\1</div>', html.toc_html)
+    else:
+        metadata["toc_html"] = ""
 
     # Custom css for the document based on metadata.
     doc_css = ""

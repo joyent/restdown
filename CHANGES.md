@@ -2,7 +2,9 @@
 
 ## restdown 1.2.16 (not yet released)
 
-(nothing yet)
+- [issue #9] Fix breakage if there are no TOC sections, i.e. no second h1 in
+  the input restdown content.
+
 
 ## restdown 1.2.15
 
