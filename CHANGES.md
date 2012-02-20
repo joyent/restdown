@@ -2,7 +2,8 @@
 
 ## restdown 1.2.17 (not yet released)
 
-(nothing yet)
+- [issue #10] "spartan" brand: Fix the TOC dropdown closing right away
+  in Firefox.
 
 
 ## restdown 1.2.16
@@ -14,7 +15,7 @@
 
 ## restdown 1.2.15
 
-- "spartan" branch: Fix path to jquery if using a "mediaroot" config value
+- "spartan" brand: Fix path to jquery if using a "mediaroot" config value
   other than the defualt "/media".
 
 

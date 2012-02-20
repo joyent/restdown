@@ -12,7 +12,7 @@ $(function () {
     $("#toc a").click(function(event) {
         $("#tocbutton").click();
     })
-    $("#tocbutton").click(function() {
+    $("#tocbutton").click(function(event) {
         var target = $("#toc");
         if (target.css("display") !== "block") {
             $("body").bind("click.tocCloser", function(event) {
@@ -23,7 +23,7 @@ $(function () {
             $("body").unbind("click.tocCloser");
         }
         target.slideToggle(100);
-        event.stopPropagation(); 
+        event.stopPropagation();
     });
 });
 </script>
