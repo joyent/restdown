@@ -1,5 +1,10 @@
 # restdown Changelog
 
+## restdown 1.2.18 (not yet released)
+
+(nothing yet)
+
+
 ## restdown 1.2.17
 
 - [issue #10] "spartan" brand: Fix the TOC dropdown closing right away
