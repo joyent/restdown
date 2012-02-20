@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.17 (not yet released)
+## restdown 1.2.17
 
 - [issue #10] "spartan" brand: Fix the TOC dropdown closing right away
   in Firefox.
