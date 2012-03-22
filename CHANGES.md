@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.18 (not yet released)
+## restdown 1.2.18
 
 - [issue #11] "ohthejoy" brand: Avoid hang in jquery using '|=' selector on TOC
   elements which might have a single-quote. See
