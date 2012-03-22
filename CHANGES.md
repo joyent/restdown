@@ -1,5 +1,10 @@
 # restdown Changelog
 
+## restdown 1.2.19 (not yet released)
+
+(nothing yet)
+
+
 ## restdown 1.2.18
 
 - [issue #11] "ohthejoy" brand: Avoid hang in jquery using '|=' selector on TOC
