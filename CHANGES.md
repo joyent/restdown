@@ -1,5 +1,10 @@
 # restdown Changelog
 
+## restdown 1.2.20 (not yet released)
+
+(nothing yet)
+
+
 ## restdown 1.2.19
 
 - [issue #14] Only take first token in h2 api endpoint header as the endpoint name.
