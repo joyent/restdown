@@ -101,7 +101,12 @@ class Restdowner(Markdown):
                     if m:
                         gd = m.groupdict()
                         self.methods[text] = (gd.get("name"), gd.get("verb"), gd.get("path"))
-                        return ("name" in gd and m.group("name")
+                        # The `.split()[0]` is for e.g.:
+                        #   PutDirectory [mkdir] (PUT /:account/:dir)
+                        # I.e. to exclude the extra "[mkdir]" stuff from the
+                        # anchor. The idea is that the first no-space token
+                        # is the API endpoint name.
+                        return ("name" in gd and m.group("name").split()[0]
                                 or m.group(0)).replace(' ', '-')
         else:
             if len(self._h1_stack) == 1 and self._h1_stack[-1] not in self.api_sections:
@@ -116,16 +121,14 @@ class Restdowner(Markdown):
                     if m:
                         gd = m.groupdict()
                         self.methods[text] = (gd.get("name"), gd.get("verb"), gd.get("path"))
-                        return ("name" in gd and m.group("name")
-                                or m.group(0)).replace(' ', '-')
-                        return ("name" in m.groupdict() and m.group("name")
+                        return ("name" in gd and m.group("name").split()[0]
                                 or m.group(0)).replace(' ', '-')
             elif n in (1,2):
                 return super(Restdowner, self).header_id_from_text(text, prefix, n)
 
     # Add some markup to endpoint entries in the TOC html for styling.
     _method_subs = [
-        # E.g. "ListMachines (GET /machines)"
+        # E.g. "ListMachines ... (GET /machines)"
         (re.compile(r'^(?P<name>.*?) +\((?P<verb>GET|PUT|POST|DELETE|HEAD|OPTIONS|TRACE) +(?P<path>.*?)\)$'),
          r'<span class="method both"><span class="name">\1</span> <span class="endpoint">(<span class="verb">\2</span> <span class="path">\3</span>)</span>'),
         # E.g. "GET /machines"
