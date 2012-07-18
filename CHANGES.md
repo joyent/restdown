@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.21 (not yet released)
+## restdown 1.2.21
 
 - More fixing of headers with escaped Markdown chars (e.g. "foo\\_bar").
 
