@@ -2,7 +2,8 @@
 
 ## restdown 1.2.20 (not yet released)
 
-(nothing yet)
+- [issue #15] Unescape escaped chars in Table on Contents entries. The underlying issue
+  was markdown2.py (fixed in markdown2 2.0.1).
 
 
 ## restdown 1.2.19
