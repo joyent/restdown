@@ -95,12 +95,14 @@ class Restdowner(Markdown):
             elif n == 1:
                 return super(Restdowner, self).header_id_from_text(text, prefix, n)
             elif n == 2:
-                # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
+                # API endpoint.
                 for regex, sub in self._method_subs:
                     m = regex.match(text)
                     if m:
                         gd = m.groupdict()
-                        self.methods[text] = (gd.get("name"), gd.get("verb"), gd.get("path"))
+                        # Render-away escaped chars: 'foo\\_bar' -> 'foo_bar'.
+                        rtext = self._unescape_special_chars(self._escape_special_chars(text))
+                        self.methods[rtext] = (gd.get("name"), gd.get("verb"), gd.get("path"))
                         # The `.split()[0]` is for e.g.:
                         #   PutDirectory [mkdir] (PUT /:account/:dir)
                         # I.e. to exclude the extra "[mkdir]" stuff from the
@@ -115,12 +117,13 @@ class Restdowner(Markdown):
                 pass
             elif n == 2 and self._h1_stack[-1] in self.api_sections:
                 # API endpoint.
-                # "GET /sshkeys/:id" -> "GET-/sshkeys/:id"
                 for regex, sub in self._method_subs:
                     m = regex.match(text)
                     if m:
                         gd = m.groupdict()
-                        self.methods[text] = (gd.get("name"), gd.get("verb"), gd.get("path"))
+                        # Render-away escaped chars: 'foo\\_bar' -> 'foo_bar'.
+                        rtext = self._unescape_special_chars(self._escape_special_chars(text))
+                        self.methods[rtext] = (gd.get("name"), gd.get("verb"), gd.get("path"))
                         return ("name" in gd and m.group("name").split()[0]
                                 or m.group(0)).replace(' ', '-')
             elif n in (1,2):
@@ -139,7 +142,8 @@ class Restdowner(Markdown):
          r'<span class="method name"><span class="name">\1</span></span>'),
     ]
     def _toc_add_entry(self, n, id, name):
-        if n == 2 and name in self.methods:
+        rname = self._unescape_special_chars(name)
+        if n == 2 and rname in self.methods:
             for regex, sub in self._method_subs:
                 m = regex.match(name)
                 if m:
@@ -151,7 +155,7 @@ class Restdowner(Markdown):
     _method_header_re = re.compile(
         r'''^(<h2.*?>)(.*?)(</h2>)$''', re.M)
     def _method_header_sub(self, match):
-        inside = match.group(2)
+        inside = self._unescape_special_chars(match.group(2))
         if inside in self.methods:
             for regex, sub in self._method_subs:
                 m = regex.match(inside)
@@ -163,7 +167,6 @@ class Restdowner(Markdown):
     _first_h1_and_block_re = re.compile(r'(<h1.*?</h1>)(.*?)(?=<h1)', re.S)
     def postprocess(self, text):
         # Markup method h2's for styling.
-        self._h1_stack = [] # reset
         text = self._method_header_re.sub(self._method_header_sub, text)
 
         # Identify shell pre-blocks for styling.
@@ -174,6 +177,7 @@ class Restdowner(Markdown):
         text = self._first_h1_and_block_re.sub(
             r'\n\1\n<div class="intro">\n\2\n</div>\n', text, 1)
 
+        self._h1_stack = [] # reset
         return text
 
 def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
