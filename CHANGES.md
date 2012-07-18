@@ -1,5 +1,10 @@
 # restdown Changelog
 
+## restdown 1.2.21 (not yet released)
+
+(nothing yet)
+
+
 ## restdown 1.2.20
 
 - [issue #15] Unescape escaped chars in Table on Contents entries. The underlying issue
