@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.22 (not yet released)
+## restdown 1.2.22
 
 - [issue #17] Fix `<pre class="shell"><code>$ ...</code></pre>` handling. Was broken in 1.2.21 or 1.2.20.
 
