@@ -14,7 +14,7 @@ sex it up a bit.
 See <https://github.com/trentm/restdown> for more info.
 """
 
-__version_info__ = (1, 2, 22)
+__version_info__ = (1, 2, 23)
 __version__ = '.'.join(map(str, __version_info__))
 
 import re
