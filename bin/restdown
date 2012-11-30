@@ -174,10 +174,6 @@ class Restdowner(Markdown):
         text = self._method_header_re.sub(self._method_header_sub, text)
 
         # Identify shell pre-blocks for styling.
-        print "XXX matching 'shell' PREs: ", (self._pre_command_block_re.search(text) is not None)
-        print "--"
-        print text
-        print "--"
         text = self._pre_command_block_re.sub(
             r'<pre class="shell"><code>\1</code></pre>', text)
 

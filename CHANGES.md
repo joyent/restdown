@@ -2,7 +2,7 @@
 
 ## restdown 1.2.23 (not yet released)
 
-(nothing yet)
+- Remove debugging print in 1.2.22. Sigh.
 
 
 ## restdown 1.2.22
