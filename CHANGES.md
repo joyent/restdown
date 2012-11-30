@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.2.23 (not yet released)
+## restdown 1.2.23
 
 - Remove debugging print in 1.2.22. Sigh.
 
