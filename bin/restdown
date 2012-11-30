@@ -37,7 +37,7 @@ from urllib import quote_plus as urlquote
 _saved_path = sys.path[:]
 sys.path.insert(0, join(dirname(dirname(abspath(realpath(__file__)))), "externals", "lib")) # dev layout
 sys.path.insert(0, join(dirname(realpath(__file__)))) # allow markdown2.py in same dir
-from markdown2 import Markdown
+from markdown2 import Markdown, UnicodeWithAttrs
 sys.path = _saved_path
 del _saved_path
 
@@ -165,11 +165,19 @@ class Restdowner(Markdown):
 
     _pre_command_block_re = re.compile(r'<pre><code>\$ (.*?)</code></pre>', re.S)
     _first_h1_and_block_re = re.compile(r'(<h1.*?</h1>)(.*?)(?=<h1)', re.S)
-    def postprocess(self, text):
+    def postpostprocess(self, text):
+        """This method (*post*postprocess) isn't a real markdown2.py thing.
+        We are hacking this in because we need to work on the converted
+        text *after* unescaping of special chars.
+        """
         # Markup method h2's for styling.
         text = self._method_header_re.sub(self._method_header_sub, text)
 
         # Identify shell pre-blocks for styling.
+        print "XXX matching 'shell' PREs: ", (self._pre_command_block_re.search(text) is not None)
+        print "--"
+        print text
+        print "--"
         text = self._pre_command_block_re.sub(
             r'<pre class="shell"><code>\1</code></pre>', text)
 
@@ -179,6 +187,19 @@ class Restdowner(Markdown):
 
         self._h1_stack = [] # reset
         return text
+
+    def convert(self, text):
+        mtext = Markdown.convert(self, text)
+        text = self.postpostprocess(mtext)
+
+        # This is a total gross hack: reproduce the UnicodeWithAttrs wrapping
+        # that markdown2.py is doing.
+        rv = UnicodeWithAttrs(text)
+        if hasattr(mtext, "_toc"):
+            rv._toc = mtext._toc
+        if hasattr(mtext, "metadata"):
+            rv.metadata = mtext.metadata
+        return rv
 
 def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
     markdown = codecs.open(path, 'r', 'utf-8').read()
