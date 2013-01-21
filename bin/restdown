@@ -132,10 +132,10 @@ class Restdowner(Markdown):
     # Add some markup to endpoint entries in the TOC html for styling.
     _method_subs = [
         # E.g. "ListMachines ... (GET /machines)"
-        (re.compile(r'^(?P<name>.*?) +\((?P<verb>GET|PUT|POST|DELETE|HEAD|OPTIONS|TRACE) +(?P<path>.*?)\)$'),
+        (re.compile(r'^(?P<name>.*?) +\((?P<verb>GET|PUT|POST|DELETE|HEAD|OPTIONS|TRACE|PATCH|LINK|UNLINK) +(?P<path>.*?)\)$'),
          r'<span class="method both"><span class="name">\1</span> <span class="endpoint">(<span class="verb">\2</span> <span class="path">\3</span>)</span>'),
         # E.g. "GET /machines"
-        (re.compile(r'^(?P<verb>GET|PUT|POST|DELETE|HEAD|OPTIONS|TRACE) +(?P<path>.+?)$'),
+        (re.compile(r'^(?P<verb>GET|PUT|POST|DELETE|HEAD|OPTIONS|TRACE|PATCH|LINK|UNLINK) +(?P<path>.+?)$'),
          r'<span class="method justendpoint"><span class="endpoint"><span class="verb">\1</span> <span class="path">\2</span></span>'),
         # Catchall
         (re.compile(r'^(?P<name>.*?)$'),
