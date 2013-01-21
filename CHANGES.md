@@ -1,5 +1,10 @@
 # restdown Changelog
 
+## restdown 1.2.25 (not yet released)
+
+(nothing yet)
+
+
 ## restdown 1.2.24
 
 - [pull #18] Added PATCH/LINK/UNLINK methods. (by Carsten Saathoff,
