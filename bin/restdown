@@ -14,7 +14,7 @@ sex it up a bit.
 See <https://github.com/trentm/restdown> for more info.
 """
 
-__version_info__ = (1, 2, 25)
+__version_info__ = (1, 3, 0)
 __version__ = '.'.join(map(str, __version_info__))
 
 import re
@@ -37,7 +37,8 @@ from urllib import quote_plus as urlquote
 _saved_path = sys.path[:]
 sys.path.insert(0, join(dirname(dirname(abspath(realpath(__file__)))), "externals", "lib")) # dev layout
 sys.path.insert(0, join(dirname(realpath(__file__)))) # allow markdown2.py in same dir
-from markdown2 import Markdown, UnicodeWithAttrs
+# Little bit of a hack for the internal import.
+from markdown2 import Markdown, UnicodeWithAttrs, _regex_from_encoded_pattern
 sys.path = _saved_path
 del _saved_path
 
@@ -215,7 +216,7 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
         metadata["title"] = title
     if "mediaroot" not in metadata:
         metadata["mediaroot"] = "media"
-    for key in ["apisections", "markdown2extras"]:
+    for key in ["apisections", "markdown2extras", "markdown2linkpatternsfile"]:
         # Expand "list"-type config vars. They are csv.
         if key in metadata:
             f = StringIO(metadata[key])
@@ -227,7 +228,8 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
             metadata[key] = row
     if defines:
         metadata.update(defines)
-    html, data = restdown(metadata, markdown, brand_dir)
+    doc_dir = dirname(path)
+    html, data = restdown(metadata, markdown, brand_dir, doc_dir)
 
     base, ext = splitext(basename(path))
     html_path = join(dirname(path), base + ".html")
@@ -246,7 +248,7 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
         dst = join(copy_brand_media_to, "media")
         _copy_dir(src, dst)
 
-def restdown(metadata, markdown, brand_dir=None):
+def restdown(metadata, markdown, brand_dir=None, doc_dir=None):
     """Convert the given metadata and markdown content to restdown HTML.
 
     @param metadata {dict} Relevant metadata keys are:
@@ -257,12 +259,24 @@ def restdown(metadata, markdown, brand_dir=None):
     @param brand_dir {str} Brand directory (including a 'header.html.in' et al)
         to use. If not given it uses the default brand in the restdown
         installation.
+    @param doc_dir {str} The directory of the restdown file being processed.
     @returns {str, dict} The HTML document (full page) and a dict giving
         data about the API: version, endpoints.
     """
     doc_markdown_opts = copy.deepcopy(markdown_opts)
     for extra in metadata.get("markdown2extras", []):
         doc_markdown_opts["extras"][extra] = True
+    if metadata.get("markdown2linkpatternsfile"):
+        path = join(doc_dir, metadata["markdown2linkpatternsfile"][0])
+        link_patterns = []
+        for line in open(path):
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            pat, link = line.split(None, 1)
+            regex = _regex_from_encoded_pattern(pat)
+            link_patterns.append((regex, link))
+        doc_markdown_opts["link_patterns"] = link_patterns
     restdowner = Restdowner(api_sections=metadata.get("apisections"),
         **doc_markdown_opts)
     html = restdowner.convert(markdown)

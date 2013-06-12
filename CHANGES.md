@@ -1,8 +1,20 @@
 # restdown Changelog
 
-## restdown 1.2.25 (not yet released)
+## restdown 1.3.0 (not yet released)
 
-(nothing yet)
+- Add support for using
+  [link-patterns](https://github.com/trentm/python-markdown2/wiki/link-patterns)
+  in restdown docs. You need the following in your restdown doc header:
+
+        markdown2extras: ..., link-patterns, ...
+        markdown2linkpatternsfile: link-patterns.txt
+
+  where "markdown2linkpatternsfile" is a path to a link patterns file
+  (relative to the restdown document path). That file must be in the format
+  described in the markdown2 link-patterns link above. E.g., Jira ticket
+  linking might be done like this:
+
+        /([A-Z]+-\d+)/ https://example.com/jira/browse/\1
 
 
 ## restdown 1.2.24
@@ -72,7 +84,7 @@
 
 ## restdown 1.2.13
 
-- [issue #6] "spartan" brand: 
+- [issue #6] "spartan" brand:
     - Blue default logo color, instead of pink.
     - TOC margin fix for narrow screens.
     - Support for "logo-color", "logo-font-family" and "header-font-family"
@@ -164,12 +176,12 @@
 
 ## restdown 1.2.2
 
-- New default "ohthejoy" brand. Improvements: 
+- New default "ohthejoy" brand. Improvements:
     - Header styling for better section separation.
     - Fix TOC arrow to point all toc elements (also not be dependent on "VERB
       URLPATH" header text form).
     - Remove the fixed top-right section header: not that helpful, often
-      broken. 
+      broken.
 - Strip trailing whitespace in create api JSON file.
 
 
