@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.3.0 (not yet released)
+## restdown 1.3.0
 
 - Add support for using
   [link-patterns](https://github.com/trentm/python-markdown2/wiki/link-patterns)
