@@ -1,5 +1,10 @@
 # restdown Changelog
 
+## restdown 1.3.2 (not yet released)
+
+(nothing yet)
+
+
 ## restdown 1.3.1
 
 - [MANTA-1587] Changing handling of h2's in "api sections" that don't look like
