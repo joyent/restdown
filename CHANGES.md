@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.3.1 (not yet released)
+## restdown 1.3.1
 
 - [MANTA-1587] Changing handling of h2's in "api sections" that don't look like
   an API endpoint to NOT be shoehorned into the special HTML anchor generation
