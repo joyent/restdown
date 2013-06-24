@@ -111,6 +111,8 @@ class Restdowner(Markdown):
                         # is the API endpoint name.
                         return ("name" in gd and m.group("name").split()[0]
                                 or m.group(0)).replace(' ', '-')
+                else:
+                    return super(Restdowner, self).header_id_from_text(text, prefix, n)
         else:
             if len(self._h1_stack) == 1 and self._h1_stack[-1] not in self.api_sections:
                 # Still presume the first section to be a preface section
@@ -127,6 +129,8 @@ class Restdowner(Markdown):
                         self.methods[rtext] = (gd.get("name"), gd.get("verb"), gd.get("path"))
                         return ("name" in gd and m.group("name").split()[0]
                                 or m.group(0)).replace(' ', '-')
+                else:
+                    return super(Restdowner, self).header_id_from_text(text, prefix, n)
             elif n in (1,2):
                 return super(Restdowner, self).header_id_from_text(text, prefix, n)
 
@@ -138,9 +142,6 @@ class Restdowner(Markdown):
         # E.g. "GET /machines"
         (re.compile(r'^(?P<verb>GET|PUT|POST|DELETE|HEAD|OPTIONS|TRACE|PATCH|LINK|UNLINK) +(?P<path>.+?)$'),
          r'<span class="method justendpoint"><span class="endpoint"><span class="verb">\1</span> <span class="path">\2</span></span>'),
-        # Catchall
-        (re.compile(r'^(?P<name>.*?)$'),
-         r'<span class="method name"><span class="name">\1</span></span>'),
     ]
     def _toc_add_entry(self, n, id, name):
         rname = self._unescape_special_chars(name)
@@ -280,6 +281,7 @@ def restdown(metadata, markdown, brand_dir=None, doc_dir=None):
     restdowner = Restdowner(api_sections=metadata.get("apisections"),
         **doc_markdown_opts)
     html = restdowner.convert(markdown)
+
     # Add a wrapper <div> around the links in TOC elements. This allows
     # full width styling of 'li' lines, even if they contain children.
     if html.toc_html:

@@ -2,7 +2,49 @@
 
 ## restdown 1.3.1 (not yet released)
 
-(nothing yet)
+- [MANTA-1587] Changing handling of h2's in "api sections" that don't look like
+  an API endpoint to NOT be shoehorned into the special HTML anchor generation
+  and TOC HTML styling for endpoints. This is especially important for naive
+  usage of restdown where the "api-sections" metadata key is not used at all --
+  which tells restdown to treat *all* sections as using h2's only for
+  endpoints.
+
+  Effectively the difference here is that this doc:
+
+        ---
+        title: Blah
+        ---
+
+        # Blah
+
+        ... intro ...
+
+        # My section
+
+        ## ListWidgets (GET /widgets)
+
+        ## Another h2 section
+
+
+  now gets a TOC like this:
+
+        <ul>
+          <li><div><a href="#my-section">My section</a></div>
+          <ul>
+            <li><div><a href="#ListWidgets"><span class="method both"><span class="name">ListWidgets</span> <span class="endpoint">(<span class="verb">GET</span> <span class="path">/widgets</span>)</span></a></div></li>
+            <li><div><a href="#another-h2-section">Another h2 section</a></div></li>
+          </ul></li>
+        </ul>
+
+  instead of one with a broke anchor for "Another h2 section" like this:
+
+        <ul>
+          <li><div><a href="#my-section">My section</a></div>
+          <ul>
+            <li><div><a href="#ListWidgets"><span class="method both"><span class="name">ListWidgets</span> <span class="endpoint">(<span class="verb">GET</span> <span class="path">/widgets</span>)</span></a></div></li>
+            <li><div><a href="#Another"><span class="method name"><span class="name">Another h2 section</span></span></a></div></li>
+          </ul></li>
+        </ul>
 
 
 ## restdown 1.3.0
