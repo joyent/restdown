@@ -113,6 +113,8 @@ class Restdowner(Markdown):
                                 or m.group(0)).replace(' ', '-')
                 else:
                     return super(Restdowner, self).header_id_from_text(text, prefix, n)
+            else:
+                return super(Restdowner, self).header_id_from_text(text, prefix, n)
         else:
             if len(self._h1_stack) == 1 and self._h1_stack[-1] not in self.api_sections:
                 # Still presume the first section to be a preface section
@@ -131,7 +133,9 @@ class Restdowner(Markdown):
                                 or m.group(0)).replace(' ', '-')
                 else:
                     return super(Restdowner, self).header_id_from_text(text, prefix, n)
-            elif n in (1,2):
+            #elif n in (1,2):
+            #    return super(Restdowner, self).header_id_from_text(text, prefix, n)
+            else:
                 return super(Restdowner, self).header_id_from_text(text, prefix, n)
 
     # Add some markup to endpoint entries in the TOC html for styling.
@@ -151,7 +155,8 @@ class Restdowner(Markdown):
                 if m:
                     name = m.expand(sub)
                     break
-        super(Restdowner, self)._toc_add_entry(n, id, name)
+        if n <= 2:
+            super(Restdowner, self)._toc_add_entry(n, id, name)
 
 
     _method_header_re = re.compile(
