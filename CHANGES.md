@@ -1,5 +1,10 @@
 # restdown Changelog
 
+## restdown 1.3.3 (not yet released)
+
+(nothing yet)
+
+
 ## restdown 1.3.2
 
 - Enable anchors on h3, h4, h5 and h6. These still do not show up in the TOC.
