@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.3.3 (not yet released)
+## restdown 1.3.3
 
 - Update to markdown2 2.2.3.
 
