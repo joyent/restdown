@@ -2,7 +2,7 @@
 
 ## restdown 1.3.3 (not yet released)
 
-(nothing yet)
+- Update to markdown2 2.2.3.
 
 
 ## restdown 1.3.2
