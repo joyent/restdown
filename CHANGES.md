@@ -2,7 +2,7 @@
 
 ## restdown 1.3.4 (not yet released)
 
-(nothing yet)
+- Fix missing `</span>` in API endpoint `<h2>`s.
 
 
 ## restdown 1.3.3
