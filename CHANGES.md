@@ -2,7 +2,7 @@
 
 ## restdown 1.3.5 (not yet released)
 
-(nothing yet)
+- Update to markdown2 2.3.0 to get GFM 'tables' extra syntax.
 
 
 ## restdown 1.3.4
