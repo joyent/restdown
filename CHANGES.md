@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.3.6 (not yet released)
+## restdown 1.3.6
 
 - [issue #25] Correct usage of markdown2 extras.
 
