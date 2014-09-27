@@ -2,7 +2,7 @@
 
 ## restdown 1.3.6 (not yet released)
 
-(nothing yet)
+- [issue #25] Correct usage of markdown2 extras.
 
 
 ## restdown 1.3.5
