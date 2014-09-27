@@ -271,7 +271,7 @@ def restdown(metadata, markdown, brand_dir=None, doc_dir=None):
     """
     doc_markdown_opts = copy.deepcopy(markdown_opts)
     for extra in metadata.get("markdown2extras", []):
-        doc_markdown_opts["extras"][extra] = True
+        doc_markdown_opts["extras"][extra] = None
     if metadata.get("markdown2linkpatternsfile"):
         path = join(doc_dir, metadata["markdown2linkpatternsfile"][0])
         link_patterns = []
