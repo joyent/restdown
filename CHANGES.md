@@ -1,6 +1,6 @@
 # restdown Changelog
 
-## restdown 1.4.0 (not yet released)
+## restdown 1.4.0
 
 - `restdown -J,--no-json` option to NOT generate the API summary .json file.
   Many uses of restdown just don't use that file.
