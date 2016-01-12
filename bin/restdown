@@ -204,7 +204,8 @@ class Restdowner(Markdown):
             rv.metadata = mtext.metadata
         return rv
 
-def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
+def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None,
+        no_json=False):
     markdown = codecs.open(path, 'r', 'utf-8').read()
     metadata = {}
     if markdown.startswith("---"):
@@ -241,11 +242,13 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None):
     html_path = join(dirname(path), base + ".html")
     codecs.open(html_path, "w", "utf-8").write(html)
     log.info("wrote %s", html_path)
-    json_path = join(dirname(path), base + ".json")
-    json_str = json.dumps(data, sort_keys=True, indent=2) + '\n'
-    json_str = re.compile(r' +$', re.M).sub('', json_str)  # trailing whitespace sucks
-    codecs.open(json_path, "w", "utf-8").write(json_str)
-    log.info("wrote %s", json_path)
+
+    if not no_json:
+        json_path = join(dirname(path), base + ".json")
+        json_str = json.dumps(data, sort_keys=True, indent=2) + '\n'
+        json_str = re.compile(r' +$', re.M).sub('', json_str)  # trailing whitespace sucks
+        codecs.open(json_path, "w", "utf-8").write(json_str)
+        log.info("wrote %s", json_path)
 
     if copy_brand_media_to is not None:
         if not isdir(copy_brand_media_to):
@@ -714,6 +717,8 @@ def main(argv=sys.argv):
     parser.add_option("-q", "--quiet", dest="log_level",
         action="store_const", const=logging.WARNING,
         help="quieter output (just warnings and errors)")
+    parser.add_option("-J", "--no-json", dest="no_json", action="store_true",
+        help="Disable creation of the .json API overview file");
     parser.add_option("-m", "--copy-brand-media-to", metavar="DIR",
         help="also copy brand 'media/' dir to the given output dir")
     parser.add_option("-b", "--brand-dir", metavar="DIR",
@@ -731,7 +736,8 @@ def main(argv=sys.argv):
     for path in paths:
         restdown_path(path, brand_dir=opts.brand_dir,
             copy_brand_media_to=opts.copy_brand_media_to,
-            defines=defines)
+            defines=defines,
+            no_json=opts.no_json)
 
 ## {{{ http://code.activestate.com/recipes/577258/ (r4)
 if __name__ == "__main__":
