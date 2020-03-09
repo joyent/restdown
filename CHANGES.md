@@ -1,8 +1,10 @@
 # restdown Changelog
 
-## restdown 1.4.2 (not released yet)
+## restdown 1.4.2 (not yet released)
 
-## restdown 1.4.1 (not yet released)
+(nothing yet)
+
+## restdown 1.4.1
 
 - Allow us to run in environments where python3.x is the default python
 
