@@ -30,9 +30,22 @@ import logging
 import json
 import copy
 import optparse
-from StringIO import StringIO
+
+if sys.version_info[0] <= 2:
+    from StringI import StringIO
+    from urllib import quote_plus as urlquote
+
+    class RestdownError(StandardError):
+        pass
+
+elif sys.version_info[0] >= 3:
+    from io import StringIO
+    from urllib.parse import quote_plus as urlquote
+
+    class RestdownError(Exception):
+        pass
+
 import csv
-from urllib import quote_plus as urlquote
 
 _saved_path = sys.path[:]
 sys.path.insert(0, join(dirname(dirname(abspath(realpath(__file__)))), "externals", "lib")) # dev layout
@@ -56,11 +69,6 @@ markdown_opts = {
         "markdown-in-html": True,
     }
 }
-
-
-class RestdownError(StandardError):
-    pass
-
 
 
 #---- restdown processor
@@ -229,7 +237,11 @@ def restdown_path(path, brand_dir=None, copy_brand_media_to=None, defines=None,
             f = StringIO(metadata[key])
             reader = csv.reader(f)
             try:
-                row = [cell.strip() for cell in reader.next()]
+                row = None
+                if sys.version_info[0] >= 3:
+                    row = [cell.strip() for cell in reader.__next__()]
+                else:
+                    row = [cell.strip() for cell in reader.next()]
             except StopIteration:
                 row = []
             metadata[key] = row
@@ -445,7 +457,11 @@ class _NoReflowFormatter(optparse.IndentedHelpFormatter):
 try:
     from thread import get_ident as _get_ident
 except ImportError:
-    from dummy_thread import get_ident as _get_ident
+    try:
+        from dummy_thread import get_ident as _get_ident
+    except ImportError:
+        from _dummy_thread import get_ident as _get_ident
+
 
 try:
     from _abcoll import KeysView, ValuesView, ItemsView
