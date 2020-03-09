@@ -32,7 +32,7 @@ import copy
 import optparse
 
 if sys.version_info[0] <= 2:
-    from StringI import StringIO
+    from StringIO import StringIO
     from urllib import quote_plus as urlquote
 
     class RestdownError(StandardError):
